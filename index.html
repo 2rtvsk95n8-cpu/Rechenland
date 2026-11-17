@@ -332,12 +332,13 @@ svg.map{display:block;width:100%;height:auto}
 .gifts span{width:38px;height:38px;animation:pop .5s backwards}
 .gifts svg{width:100%;height:100%}
 .favlist{width:100%;text-align:left;background:var(--cream);border-radius:16px;padding:12px 14px;border:2px solid #F4DDA0}
-.favlist ul{margin:8px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.favlist ul{margin:8px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
 .favlist li button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:6px;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:6px 8px 6px 10px;font-family:var(--font-display);font-weight:800;font-size:18px;text-align:left;font-variant-numeric:tabular-nums}
-.favlist li button span{min-width:0;overflow-wrap:anywhere}
-.favlist li svg{width:22px;height:22px;flex:none;fill:none;stroke:var(--red);stroke-width:2.4}
+
+.favlist li .hrt{flex:none;display:grid}
+.favlist li .hrt svg{width:24px;height:24px;fill:none;stroke:var(--red);stroke-width:2.4}
 .favlist li button[aria-pressed="true"]{border-color:var(--red);background:#FFF0EF}
-.favlist li button[aria-pressed="true"] svg{fill:var(--red)}
+.favlist li button[aria-pressed="true"] .hrt svg{fill:var(--red)}
 .done .host{justify-content:center}
 .done .host .bubble{flex:0 1 auto;text-align:left}
 
@@ -356,9 +357,9 @@ svg.map{display:block;width:100%;height:auto}
 .need svg{width:28px;height:28px}
 .need.ok{border-color:var(--good);background:#E3F6EC}
 .big:disabled{opacity:.45;cursor:default}
-.favgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.favgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
 .fcard{position:relative;background:var(--surface);border:2px solid var(--line);border-radius:16px;box-shadow:0 3px 0 var(--line);padding:10px 10px 10px 12px;display:flex;flex-direction:column;gap:4px;text-align:left;min-width:0}
-.fcard b{font-family:var(--font-display);font-size:21px;line-height:1.15;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+
 .fcard small{color:var(--muted);font-size:14px;font-weight:700}
 .fwrap{position:relative;min-width:0}
 .fwrap .fcard{width:100%}
@@ -374,6 +375,31 @@ svg.map{display:block;width:100%;height:auto}
 .field2 input{font:inherit;font-size:22px;font-family:var(--font-display);font-weight:800;padding:10px 14px;border-radius:14px;border:2px solid var(--line);background:var(--surface);color:var(--ink);width:100%}
 .field2 input:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 .danger{color:var(--red);font-weight:700;padding:10px;border-radius:12px;border:2px solid var(--line);background:var(--surface)}
+
+/* Mini-Ansichten der Lieblingsaufgaben */
+.qv{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;font-family:var(--font-display);font-weight:800;font-size:20px;line-height:1.15;font-variant-numeric:tabular-nums;color:var(--ink)}
+.qv .qt{overflow-wrap:anywhere}
+.qv .mb{display:inline-block;min-width:1.5em;text-align:center;border:2px solid var(--line);border-radius:8px;padding:0 4px}
+.qv .field{padding:3px;gap:3px;border-width:1px;border-radius:6px}
+.qv .frow{gap:5px}
+.qv .grp{gap:2px}
+.qv .cell{--cell:10px;font-size:0}
+.qv .dice{display:flex;gap:6px}
+.qv .die{width:32px;height:32px;padding:3px;border-width:2px;border-radius:7px;gap:1px}
+.qv .queue{font-size:15px;gap:0}
+.qv .emo{font-size:15px;line-height:1.2;letter-spacing:-1px}
+.qv .rows{display:flex;flex-direction:column;font-size:16px;line-height:1.25}
+.qv .rows span:last-child{color:var(--blue)}
+.qv .sudo{grid-template-columns:repeat(4,20px);border-width:2px;border-radius:5px}
+.qv .sc{height:20px;font-size:13px;border-width:1px}
+.qv .sc.c1{border-right-width:2px}
+.qv .sc.r1{border-bottom-width:2px}
+.qv .mhouse{display:inline-flex;flex-direction:column;width:64px;font-size:16px}
+.qv .mroof{background:var(--red);color:#fff;clip-path:polygon(50% 0,100% 100%,0 100%);text-align:center;padding-top:9px;height:28px;line-height:1}
+.qv .mrooms{display:grid;grid-template-columns:1fr 1fr;border:2px solid var(--ink);border-top:0}
+.qv .mrooms span{text-align:center}
+.qv .mrooms span+span{border-left:2px solid var(--ink)}
+.fcard .qv{flex:none}
 
 .legal{text-align:center;font-size:15px;color:var(--muted)}
 .legal a{color:var(--muted);font-weight:700;text-underline-offset:3px}
@@ -1146,6 +1172,27 @@ function qText(t){
     case 'sudoku':return 'Sudoku';
   }
 }
+/* ---------- Mini-Ansicht einer Aufgabe (Lieblingsaufgaben) ---------- */
+const MB=x=>`<span class="mb">${x}</span>`;
+const QT=x=>`<span class="qt">${x}</span>`;
+function qVis(t){
+  const R=t.R||10;
+  switch(t.mode){
+    case 'zaehlen':return field(R,fill(t.n,'r'))+QT('= ?');
+    case 'blitz':
+      if(t.kind==='streifen')return field(R,fill(t.n,'r'))+QT('= ?');
+      return `<span class="dice">${die(t.a)}${t.kind==='wuerfel2'?die(t.b):''}</span>`+QT('= ?');
+    case 'immer':return QT(`Immer ${t.T}`)+field(R,fill(t.s,'r'));
+    case 'ordnung':return queueHTML(t,false)+QT(`Wo ist ${t.s.x}?`);
+    case 'geschichte':{const E=n=>`<span class="emo">${fill(n,t.s.e).join('')}</span>`;return E(t.a)+QT(t.plus?'+':'−')+E(t.b)+QT('= ?');}
+    case 'muster':return `<span class="rows">${t.rows.map((r,i)=>`<span>${(i===3?r.slice(0,4).concat('?'):r).join(' ')}</span>`).join('')}</span>`;
+    case 'sudoku':return sudokuHTML(t,false,false);
+    case 'nachbar':return t.vor?MB('?')+MB(t.n):MB(t.n)+MB('?');
+    case 'vergleich':return QT(t.a)+MB('?')+QT(t.b);
+    case 'haus':return `<span class="mhouse"><span class="mroof">${t.n}</span><span class="mrooms">${t.side==='l'?`<span>${t.k}</span><span>?</span>`:`<span>?</span><span>${t.k}</span>`}</span></span>`;
+    default:return QT(esc(qText(t)));
+  }
+}
 const modeOf=id=>MODES.find(m=>m.id===id);
 const isFav=t=>store.favs.some(f=>f.key===t.key);
 function toggleFav(t){
@@ -1376,7 +1423,7 @@ function finish(){
   speak(say+' '+$('#doneTitle').textContent);
 }
 function renderFavPick(){
-  $('#favPick').innerHTML=G.tasks.map((t,i)=>`<li><button data-fi="${i}" aria-pressed="${isFav(t)}"><span>${esc(qText(t))}</span>${HEART}</button></li>`).join('');
+  $('#favPick').innerHTML=G.tasks.map((t,i)=>`<li><button data-fi="${i}" aria-pressed="${isFav(t)}" aria-label="${esc((modeOf(t.mode)||{}).name+': '+qText(t))}"><span class="qv" aria-hidden="true">${qVis(t)}</span><span class="hrt">${HEART}</span></button></li>`).join('');
 }
 $('#favPick').addEventListener('click',e=>{const b=e.target.closest('[data-fi]');if(!b||!G)return;const on=toggleFav(G.tasks[+b.dataset.fi]);b.setAttribute('aria-pressed',on);if(on)tone([[784,.1],[1047,.14]]);});
 $('#favBtn').addEventListener('click',()=>{if(!G)return;const on=toggleFav(cur());renderFavBtn();const b=$('#favBtn');b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');if(on){tone([[784,.1],[1047,.14]]);speak('Gemerkt! Die Aufgabe kommt in dein Haus.',false);}});
@@ -1466,7 +1513,7 @@ function renderFavs(){
   }
   box.innerHTML=`<h3>Meine Lieblingsaufgaben</h3><p class="sub">${n} gesammelt. Tippe auf eine Karte, um sie zu rechnen.</p>
     <button class="big go" id="favAll">${n>10?'10 davon rechnen':'Alle rechnen'}</button>
-    <div class="favgrid">${store.favs.map((t,i)=>{const m=modeOf(t.mode);return `<div class="fwrap"><button class="fcard" data-play="${i}"><b>${esc(qText(t))}</b><small>${m?m.name:''}</small></button><button class="fdel" data-del="${i}" aria-label="Aus Lieblingsaufgaben entfernen">✕</button></div>`;}).join('')}</div>`;
+    <div class="favgrid">${store.favs.map((t,i)=>{const m=modeOf(t.mode);return `<div class="fwrap"><button class="fcard" data-play="${i}" aria-label="${esc((m?m.name+': ':'')+qText(t))}"><span class="qv" aria-hidden="true">${qVis(t)}</span><small>${m?m.name:''}</small></button><button class="fdel" data-del="${i}" aria-label="Aus Lieblingsaufgaben entfernen">✕</button></div>`;}).join('')}</div>`;
   $('#favAll').onclick=()=>start('fav',shuffle(store.favs).slice(0,10).map(t=>Object.assign({},t)));
 }
 $('#favs').addEventListener('click',e=>{
