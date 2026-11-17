@@ -1,0 +1,14 @@
+Optional: Schriften für das Rechenland
+
+Ohne diese Dateien läuft alles, nur mit einer ähnlichen Systemschrift.
+Wer die Original-Schriften möchte (ohne Google-Server, datenschutzfreundlich):
+
+1. https://gwfh.mranftl.com/fonts öffnen
+2. "Baloo 2" suchen, Stile 600 und 800 auswählen, Format "Modern Browsers" (woff2), herunterladen
+3. "Andika" suchen, Stile regular und 700 auswählen, herunterladen
+4. Die .woff2-Dateien in diesen Ordner "fonts" legen. Sie müssen so heißen:
+   baloo-2-v21-latin-600.woff2
+   baloo-2-v21-latin-800.woff2
+   andika-v25-latin-regular.woff2
+   andika-v25-latin-700.woff2
+   (Falls die Versionsnummer anders ist, z. B. v22, die Datei einfach umbenennen.)

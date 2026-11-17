@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Impressum und Datenschutz – Rechenland</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#86C46A">
+<link rel="icon" type="image/png" href="icon-512.png">
+<style>
+@font-face{font-family:"Baloo 2";font-weight:800;font-display:swap;src:url("fonts/baloo-2-v21-latin-800.woff2") format("woff2")}
+@font-face{font-family:"Andika";font-weight:400;font-display:swap;src:url("fonts/andika-v25-latin-regular.woff2") format("woff2")}
+@font-face{font-family:"Andika";font-weight:700;font-display:swap;src:url("fonts/andika-v25-latin-700.woff2") format("woff2")}
+:root{
+  /* Gleiche Farbwelt wie das Spiel, ruhiger Lesetext in einer Spalte */
+  --bg:#E6F0FA;--surface:#FFFFFF;--ink:#1B2A4A;--muted:#5A6A8A;--line:#C8D6EA;--blue:#2D6CD8;--grass:#86C46A;--todo:#FFF1C2;
+  --font-display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --font-body:"Andika","Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.55}
+.wrap{max-width:680px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+.back{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:8px 14px;font-family:var(--font-display);font-weight:800;font-size:19px;color:var(--ink);text-decoration:none;box-shadow:0 3px 0 var(--line)}
+.back:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+h1,h2,h3{font-family:var(--font-display);font-weight:800;line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:34px}
+h2{font-size:26px}
+h3{font-size:19px;margin-top:6px}
+section{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:18px 18px 20px;display:flex;flex-direction:column;gap:10px}
+p,ul,address{margin:0}
+address{font-style:normal}
+ul{padding-left:1.2em}
+li+li{margin-top:4px}
+a{color:var(--blue)}
+.todo{background:var(--todo);border-radius:4px;padding:0 4px}
+.small{font-size:14px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./">← Zurück zum Rechenland</a>
+  <h1>Impressum und Datenschutz</h1>
+
+  <section id="impressum" aria-labelledby="h-imp">
+    <h2 id="h-imp">Impressum</h2>
+    <p>Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG) und § 18 Abs. 1 Medienstaatsvertrag (MStV):</p>
+    <address>
+      <span class="todo">Vorname Nachname</span><br>
+      <span class="todo">Straße Hausnummer</span><br>
+      <span class="todo">PLZ Ort</span><br>
+      Deutschland
+    </address>
+    <h3>Kontakt</h3>
+    <p>E-Mail: <span class="todo">name@beispiel.de</span></p>
+    <h3>Verantwortlich für den Inhalt</h3>
+    <p><span class="todo">Vorname Nachname</span>, Anschrift wie oben.</p>
+    <h3>Hinweis zum Angebot</h3>
+    <p>Das Rechenland ist ein privates, kostenloses und werbefreies Lernspiel für Kinder der 1. Klasse. Es verfolgt keine wirtschaftlichen Zwecke.</p>
+  </section>
+
+  <section id="datenschutz" aria-labelledby="h-ds">
+    <h2 id="h-ds">Datenschutzerklärung</h2>
+
+    <h3>1. Wer ist verantwortlich?</h3>
+    <p>Verantwortlich im Sinne der Datenschutz-Grundverordnung (DSGVO) ist die im Impressum genannte Person.</p>
+
+    <h3>2. Kurz gesagt</h3>
+    <ul>
+      <li>Das Rechenland setzt keine Cookies ein und nutzt keine Analyse- oder Werbedienste.</li>
+      <li>Es gibt keine Anmeldung und kein Konto.</li>
+      <li>Schriften und Bilder werden von dieser Website selbst geladen, nicht von fremden Servern.</li>
+      <li>Der Spielstand bleibt auf dem Gerät des Kindes und wird nicht an uns übertragen.</li>
+    </ul>
+
+    <h3>3. Hosting bei GitHub Pages</h3>
+    <p>Die Website wird bei GitHub Pages bereitgestellt. Anbieter ist die GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA. Beim Aufruf der Seite verarbeitet GitHub technisch notwendige Daten, insbesondere die IP-Adresse des Geräts. Nach eigenen Angaben speichert GitHub die IP-Adressen von Besuchern einer GitHub-Pages-Seite aus Sicherheitsgründen.</p>
+    <p>Rechtsgrundlage ist unser berechtigtes Interesse an einer sicheren und zuverlässigen Bereitstellung der Website (Art. 6 Abs. 1 lit. f DSGVO). Die Daten können in die USA übermittelt werden. GitHub ist nach dem EU-U.S. Data Privacy Framework zertifiziert, für das ein Angemessenheitsbeschluss der EU-Kommission besteht (Art. 45 DSGVO). Weitere Informationen: <a href="https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">Datenschutzerklärung von GitHub</a>.</p>
+
+    <h3>4. Speicherung auf dem Gerät (Spielstand)</h3>
+    <p>Damit der Fortschritt erhalten bleibt, speichert das Spiel im lokalen Speicher des Browsers (localStorage): gesammelte Sterne und Geschenke, den Baufortschritt des Hauses, die Lieblingsaufgaben, die Einstellungen und, falls eingetragen, einen Vornamen. Diese Daten verlassen das Gerät nicht und sind für uns nicht einsehbar.</p>
+    <p>Die Speicherung ist für das gewünschte Spiel technisch erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG). Löschen können Sie die Daten jederzeit über „Einstellungen → Alles zurücksetzen“ oder indem Sie die Website-Daten im Browser löschen.</p>
+    <p>Die Angabe eines Namens ist freiwillig. Wir empfehlen, nur einen Vornamen oder Spitznamen einzutragen.</p>
+
+    <h3>5. Vorlesefunktion</h3>
+    <p>Die Vorlesefunktion ist zunächst ausgeschaltet. Wird sie eingeschaltet, nutzt das Spiel die Sprachausgabe des Browsers bzw. Betriebssystems. Je nach Gerät und gewählter Stimme kann der Hersteller (z. B. Apple, Google oder Microsoft) die vorzulesenden Texte zur Sprachausgabe auf eigenen Servern verarbeiten. Vorgelesen werden die Aufgaben, Rückmeldungen und gegebenenfalls der eingetragene Vorname. Wer das vermeiden möchte, lässt die Vorlesefunktion ausgeschaltet.</p>
+
+    <h3>6. Ihre Rechte</h3>
+    <p>Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18) und Widerspruch (Art. 21). Wenden Sie sich dazu an die im Impressum genannte E-Mail-Adresse. Außerdem können Sie sich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), zum Beispiel bei der Landesbeauftragten für den Datenschutz Niedersachsen.</p>
+
+    <p class="small">Stand: November 2026</p>
+  </section>
+
+  <a class="back" href="./">← Zurück zum Rechenland</a>
+</div>
+</body>
+</html>

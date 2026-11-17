@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rechenland</title>
+<meta name="description" content="Rechenland – Mathe üben für die 1. Klasse mit Knopf, Funkel, Brummbart und Lumi.">
+<meta name="theme-color" content="#86C46A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Rechenland">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-512.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+/* Schriften liegen (optional) im Ordner fonts/. Fehlen sie, nimmt der Browser eine ähnliche Systemschrift.
+   Es werden keine Daten an Google oder andere Dienste gesendet. */
+@font-face{font-family:"Baloo 2";font-weight:800;font-display:swap;src:url("fonts/baloo-2-v21-latin-800.woff2") format("woff2")}
+@font-face{font-family:"Baloo 2";font-weight:600;font-display:swap;src:url("fonts/baloo-2-v21-latin-600.woff2") format("woff2")}
+@font-face{font-family:"Andika";font-weight:400;font-display:swap;src:url("fonts/andika-v25-latin-regular.woff2") format("woff2")}
+@font-face{font-family:"Andika";font-weight:700;font-display:swap;src:url("fonts/andika-v25-latin-700.woff2") format("woff2")}
+:root{
+  /* Eine helle Kinderwelt: Wendeplättchen rot/blau, Sterne gelb, ruhiger Himmel als Grund.
+     Layout: eine Bildschirmspalte (max. 560px), oben Status, Mitte Aufgabe, unten große Tasten. */
+  --bg:#E6F0FA;
+  --surface:#FFFFFF;
+  --ink:#1B2A4A;
+  --muted:#5A6A8A;
+  --line:#C8D6EA;
+  --red:#E0443A;
+  --blue:#2D6CD8;
+  --star:#FFB60F;
+  --good:#16935B;
+  --teal:#0C8F9B;
+  --font-display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --font-body:"Andika","Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.app{max-width:560px;margin:0 auto;min-height:100%;padding:16px 16px 24px;display:flex;flex-direction:column;gap:16px}
+[hidden]{display:none!important}
+h1,h2{font-family:var(--font-display);margin:0;line-height:1.1;text-wrap:balance}
+
+/* ---------- Kopf ---------- */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand h1{font-size:32px;font-weight:800}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:4px 14px;font-family:var(--font-display);font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
+.star{width:1em;height:1em;flex:none;fill:var(--star)}
+.star.off{fill:var(--line)}
+
+/* ---------- Startseite ---------- */
+.label{font-size:15px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:0 0 8px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:6px}
+.seg button{border-radius:13px;padding:10px;font-family:var(--font-display);font-weight:800;font-size:22px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.groups{display:flex;flex-direction:column;gap:18px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px;display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;box-shadow:0 3px 0 var(--line);transition:transform .1s}
+.tile:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.badge{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-family:var(--font-display);font-weight:800;font-size:26px;color:#fff;background:var(--c)}
+.badge svg{width:30px;height:30px}
+.tile b{font-family:var(--font-display);font-size:21px;line-height:1.1}
+.tile small{color:var(--muted);font-size:15px;line-height:1.25}
+.mini{display:flex;gap:2px;font-size:16px;margin-top:auto;padding-top:2px}
+.toggles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tog{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:10px 14px;font-weight:700}
+.tog .sw{width:44px;height:26px;border-radius:99px;background:var(--line);position:relative;flex:none;transition:background .15s}
+.tog .sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .15s}
+.tog[aria-pressed="true"] .sw{background:var(--good)}
+.tog[aria-pressed="true"] .sw::after{left:21px}
+.note{font-size:15px;color:var(--muted);background:var(--surface);border-radius:14px;padding:12px 14px;border:2px dashed var(--line)}
+.note p{margin:0}
+.note p+p{margin-top:6px}
+
+/* ---------- Spiel ---------- */
+.bar{display:flex;align-items:center;gap:10px}
+.x{width:44px;height:44px;border-radius:12px;background:var(--surface);border:2px solid var(--line);font-size:24px;font-weight:700;display:grid;place-items:center;flex:none}
+.dots{display:flex;gap:5px;flex:1;justify-content:center;flex-wrap:wrap}
+.pdot{width:16px;height:16px;border-radius:50%;background:var(--surface);border:2px solid var(--line)}
+.pdot.cur{border-color:var(--ink);transform:scale(1.2)}
+.pdot.good{background:var(--star);border-color:var(--star)}
+.pdot.help{background:var(--blue);border-color:var(--blue)}
+.pdot.miss{background:var(--surface);border-color:var(--blue);border-style:dashed}
+.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:15px;font-weight:700}
+.card{background:var(--surface);border-radius:24px;border:2px solid var(--line);padding:18px 12px 20px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.prompt{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:700;text-align:center;justify-content:center;text-wrap:balance}
+.say{width:40px;height:40px;border-radius:50%;background:var(--bg);display:grid;place-items:center;flex:none}
+.say svg{width:22px;height:22px;fill:var(--ink)}
+.task{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+.eq{display:flex;align-items:center;justify-content:center;gap:.28em;font-family:var(--font-display);font-weight:800;font-size:clamp(46px,14vw,68px);line-height:1;font-variant-numeric:tabular-nums;flex-wrap:wrap}
+.eq.sm{font-size:clamp(34px,10vw,54px)}
+.eq.solo{font-size:52px}
+.eq .op{color:var(--muted)}
+.num{min-width:1.1em;text-align:center}
+.box{border:3px solid var(--line);border-radius:14px;padding:.08em .22em;min-width:1.5em;text-align:center}
+.slot{display:inline-block;min-width:1.5em;padding:.08em .22em;border:3px dashed var(--blue);border-radius:14px;color:var(--blue);text-align:center;background:var(--surface)}
+.slot.good{border-style:solid;border-color:var(--good);color:var(--good);background:#E3F6EC}
+.slot.reveal{border-style:solid;border-color:var(--blue);background:#E7EFFC}
+.slot.shake{animation:shake .4s}
+.slot.pop{animation:pop .4s}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+@keyframes pop{50%{transform:scale(1.2)}}
+.fb{min-height:1.5em;font-weight:700;font-size:19px;text-align:center}
+.fb.good{color:var(--good)}
+.fb.try{color:var(--red)}
+.fb.reveal{color:var(--blue)}
+.helpbtn{font-weight:700;color:var(--blue);padding:6px 12px;border-radius:10px;border:2px solid var(--line);background:var(--surface);font-size:16px}
+.help{width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;padding-top:4px}
+.help p,.hint{margin:0;font-size:15px;color:var(--muted);text-align:center}
+
+/* Zwanzigerfeld / Rechenstreifen */
+.field{display:flex;flex-direction:column;gap:6px;padding:8px;border:2px solid var(--line);border-radius:12px;background:#F7FAFE}
+.frow{display:flex;gap:10px}
+.grp{display:flex;gap:4px;align-items:center}
+.cell{--cell:clamp(18px,6.2vw,30px);width:var(--cell);height:var(--cell);min-width:var(--cell);min-height:var(--cell);flex:none;border-radius:50%;background:#E3EAF4;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff;position:relative}
+.cell.r{background:var(--red)}
+.cell.b{background:var(--blue)}
+.cell.g{background:var(--teal)}
+.cell.o{background:transparent;border:2px dashed var(--blue)}
+.cell.x{background:var(--red);opacity:.45}
+.cell.x::after{content:"";position:absolute;inset:-2px;background:linear-gradient(45deg,transparent 44%,var(--ink) 44%,var(--ink) 56%,transparent 56%)}
+.cmp{display:flex;align-items:center;gap:10px}
+.cmp .cell{--cell:clamp(15px,5vw,26px)}
+.cmp b{font-family:var(--font-display);font-size:26px;min-width:1.4em;text-align:right}
+
+/* Zahlenhaus & Aufgabenfamilie */
+.house{width:min(240px,70vw);display:flex;flex-direction:column;align-items:stretch}
+.roof{height:92px;background:var(--red);clip-path:polygon(50% 0,100% 100%,0 100%);display:flex;align-items:flex-end;justify-content:center;gap:.4em;padding-bottom:6px;color:#fff;font-family:var(--font-display);font-weight:800;font-size:46px;line-height:1}
+.rooms{display:grid;grid-template-columns:1fr 1fr;border:3px solid var(--ink);border-top:0}
+.room{display:grid;place-items:center;padding:10px 4px;font-family:var(--font-display);font-weight:800;font-size:46px;line-height:1}
+.room+.room{border-left:3px solid var(--ink)}
+.room .slot{font-size:40px}
+.house.fam{width:min(300px,84vw)}
+.house.fam .roof{font-size:34px;height:84px}
+.fbody{border:3px solid var(--ink);border-top:0;padding:12px 10px;display:flex;flex-direction:column;gap:10px;background:#FFF8F7}
+.fline{display:flex;flex-direction:column;align-items:center;gap:2px}
+.fline small{font-size:14px;font-weight:700;color:var(--muted)}
+.fline .eq{font-size:38px}
+.fline.given .eq{color:var(--muted)}
+
+/* Zahlenstrahl & Zahlenreihe */
+.nline{display:flex;gap:4px;align-items:flex-end;border-bottom:3px solid var(--ink);padding:0 4px;flex-wrap:nowrap;width:max-content}
+.tick{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:26px;font-family:var(--font-display);font-weight:800;font-size:20px;color:var(--muted)}
+.tick::after{content:"";width:3px;height:10px;background:var(--ink)}
+.tick.hi{color:var(--red)}
+.tick.q{color:var(--blue)}
+.scroll{overflow-x:auto;max-width:100%;padding-bottom:4px}
+.reihe{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
+.rc{min-width:54px;height:66px;padding:0 4px;border-radius:6px 6px 14px 14px;background:#FFF1C2;border:2px solid var(--star);display:grid;place-items:center}
+.rc:nth-child(even){background:#DDF3E6;border-color:var(--good)}
+.rc .slot{font-size:30px;border-width:2px;padding:2px 4px;min-width:1.2em}
+
+/* Würfel & Blitzblick */
+.blitz{position:relative;display:flex;justify-content:center;padding:6px;min-height:90px;align-items:center}
+.cover{position:absolute;inset:0;display:none;place-items:center;background:var(--bg);border-radius:14px;font-family:var(--font-display);font-weight:800;font-size:44px;color:var(--muted)}
+.blitz.covered .cover{display:grid}
+.dice{display:flex;gap:18px}
+.die{width:86px;height:86px;border:3px solid var(--ink);border-radius:16px;background:#fff;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:9px;gap:3px}
+.die i{border-radius:50%}
+.die i.p{background:var(--ink)}
+
+/* Schüttelbox */
+.sbox-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+.sbox,.sparts{width:min(260px,76vw);display:grid;grid-template-columns:1fr 1fr}
+.sbox{border:3px solid var(--ink);border-radius:10px;min-height:118px;background:#fff;overflow:hidden}
+.scomp{display:flex;flex-wrap:wrap;gap:5px;align-content:center;justify-content:center;padding:8px}
+.scomp+.scomp{border-left:3px solid var(--ink)}
+.sd{width:18px;height:18px;border-radius:50%;background:var(--blue)}
+.lid{margin:-8px;width:calc(100% + 16px);align-self:stretch;min-height:110px;background:repeating-linear-gradient(45deg,#3B7BE6 0 12px,#2D6CD8 12px 24px);display:grid;place-items:center;color:#fff;font-family:var(--font-display);font-weight:800;font-size:40px}
+.sparts{justify-items:center;font-family:var(--font-display);font-weight:800;font-size:44px;line-height:1}
+.stop{font-family:var(--font-display);font-weight:800;font-size:40px;line-height:1}
+
+/* Immer gleich viel */
+.immer-t{font-family:var(--font-display);font-weight:800;font-size:30px;background:#FFF1C2;border:2px solid var(--star);border-radius:999px;padding:2px 18px}
+.immer-t b{font-size:38px}
+.tapgrid{display:grid;grid-template-columns:repeat(5,44px);gap:8px;padding:10px;border:2px solid var(--line);border-radius:14px;background:#F7FAFE}
+.tc{width:44px;height:44px;border-radius:50%;border:2px dashed var(--line);background:#fff;position:relative}
+.tc.r{background:var(--red);border:0}
+.tc.b{background:var(--blue);border:0}
+.tc.x{background:var(--red);border:0;opacity:.4}
+.tc.x::after{content:"";position:absolute;inset:-3px;background:linear-gradient(45deg,transparent 44%,var(--ink) 44%,var(--ink) 56%,transparent 56%)}
+
+/* Rechengeschichten */
+.story{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%}
+.pan{display:flex;flex-direction:column;gap:4px;align-items:center}
+.pics{width:100%;min-height:100px;border:2px solid var(--line);border-radius:10px;background:#F2F8FF;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:1px;padding:4px;font-size:clamp(15px,4.4vw,21px);line-height:1.15}
+.pics .new{background:#FFE7A0;border-radius:6px}
+.pics .gone{opacity:.22}
+.pics.q{font-family:var(--font-display);font-weight:800;font-size:48px;color:var(--blue)}
+.pan small{font-size:14px;font-weight:700;text-align:center;line-height:1.2}
+
+/* Aufgabenmuster */
+.muster{display:grid;grid-template-columns:repeat(5,auto);justify-content:center;align-items:center;justify-items:center;gap:6px 12px;font-family:var(--font-display);font-weight:800;font-size:32px;line-height:1.1;font-variant-numeric:tabular-nums}
+.muster .op{color:var(--muted)}
+.muster .slot{font-size:28px;border-width:2px;padding:0 6px}
+
+/* Ordnungszahlen */
+.queue{display:flex;align-items:flex-end;gap:2px;font-size:clamp(20px,6.3vw,30px);line-height:1.1}
+.qi{display:flex;flex-direction:column;align-items:center}
+.qi small{font-size:13px;font-weight:700;color:var(--muted);font-family:var(--font-body)}
+.qi.hit small{color:var(--blue)}
+
+/* Sudoku */
+.sudo{display:grid;grid-template-columns:repeat(4,56px);border:3px solid var(--ink);border-radius:8px;overflow:hidden;background:#fff}
+.sc{height:56px;display:grid;place-items:center;border-right:1px solid var(--line);border-bottom:1px solid var(--line);font-family:var(--font-display);font-weight:800;font-size:30px}
+.sc.c1{border-right:3px solid var(--ink)}
+.sc.r1{border-bottom:3px solid var(--ink)}
+.sc.c3{border-right:0}
+.sc.r3{border-bottom:0}
+.sc.blank{background:#EEF3F9}
+.sc.hl{background:#FFF1C2}
+.sc .slot{font-size:26px;border-width:2px;padding:0 6px;min-width:1.2em}
+
+/* Tastatur */
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:auto}
+.key{height:64px;border-radius:18px;background:var(--surface);border:2px solid var(--line);box-shadow:0 4px 0 var(--line);font-family:var(--font-display);font-weight:800;font-size:32px;transition:transform .08s}
+.key:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.key.ok{background:var(--good);border-color:var(--good);box-shadow:0 4px 0 #0E6B41;color:#fff;font-size:24px}
+.key.del{font-size:24px;color:var(--muted)}
+.cpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:auto}
+.cpad .key{height:84px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;gap:4px}
+.cpad .key small{font-family:var(--font-body);font-size:15px;color:var(--muted);font-weight:700}
+.big{width:100%;height:64px;border-radius:18px;background:var(--blue);color:#fff;font-family:var(--font-display);font-weight:800;font-size:26px;box-shadow:0 4px 0 #1C4B9E;margin-top:auto}
+.big.go{background:var(--good);box-shadow:0 4px 0 #0E6B41}
+.big.alt{background:var(--surface);color:var(--ink);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+
+/* Ende */
+.done{align-items:center;text-align:center}
+.bigstars{display:flex;gap:10px;font-size:64px;justify-content:center}
+.bigstars .star{animation:pop .5s backwards}
+.bigstars .star:nth-child(2){animation-delay:.15s}
+.bigstars .star:nth-child(3){animation-delay:.3s}
+.done h2{font-size:42px;font-weight:800}
+.done p{margin:0}
+.review{width:100%;text-align:left;background:var(--bg);border-radius:16px;padding:12px 14px}
+.review ul{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.review li{background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:4px 10px;font-family:var(--font-display);font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
+.btns{display:flex;flex-direction:column;gap:12px;width:100%}
+
+
+/* ================= Rechenland ================= */
+/* Eine Landschaft als Startbild, darunter Räume der Fabelwesen; ein Tageslicht-Look, bewusst nur hell. */
+:root{
+  --sky:#BFE3F7;
+  --grass:#86C46A;
+  --wood:#8A5530;
+  --cream:#FFF8EA;
+}
+.app{max-width:600px;padding-block:16px 28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.view{display:flex;flex-direction:column;gap:14px;flex:1}
+.gear{width:44px;height:44px;border-radius:12px;background:var(--surface);border:2px solid var(--line);display:grid;place-items:center;flex:none}
+.gear svg{width:24px;height:24px;fill:var(--muted)}
+.topr{display:flex;gap:8px;align-items:center}
+
+/* Materialleiste */
+.matbar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mat{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:5px 6px;font-family:var(--font-display);font-weight:800;font-size:21px;font-variant-numeric:tabular-nums;line-height:1}
+.mat svg{width:28px;height:28px;flex:none}
+.mat.bump{animation:pop .45s}
+.mi{display:inline-grid;place-items:center;vertical-align:middle}
+.mi svg{width:1.3em;height:1.3em}
+
+/* Karte */
+.mapwrap{border-radius:26px;overflow:hidden;border:3px solid #fff;box-shadow:0 5px 0 var(--line);background:var(--sky)}
+svg.map{display:block;width:100%;height:auto}
+.hs{cursor:pointer;outline:none}
+.hs .hb{transition:transform .15s;transform-box:fill-box;transform-origin:center bottom}
+.hs:hover .hb,.hs:focus-visible .hb{transform:scale(1.05)}
+.hs:focus-visible .lbl rect{stroke:var(--blue);stroke-width:3;stroke-opacity:1}
+.bob{animation:bob 2.8s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.cloud{animation:drift 70s linear infinite}
+@keyframes drift{from{transform:translateX(-140px)}to{transform:translateX(480px)}}
+.smoke{animation:smoke 3.2s ease-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes smoke{0%{opacity:0;transform:translateY(0) scale(.6)}25%{opacity:.8}100%{opacity:0;transform:translateY(-22px) scale(1.4)}}
+.tw{animation:tw 2.2s ease-in-out infinite}
+@keyframes tw{50%{opacity:.25}}
+.ring{animation:ring 1.4s ease-in-out infinite}
+@keyframes ring{50%{opacity:.25}}
+.jump{animation:jump 1s ease-in-out infinite}
+@keyframes jump{50%{transform:translateY(-6px)}}
+.eye{animation:blink 4.5s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+.grow{animation:grow .8s cubic-bezier(.3,1.6,.5,1) both;transform-box:fill-box;transform-origin:center bottom}
+@keyframes grow{from{transform:scale(.15);opacity:0}}
+
+/* Hinweis */
+.tip{display:flex;align-items:center;gap:10px;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:8px 12px 8px 8px}
+.tip .av{width:54px;height:58px;flex:none}
+.tip p{margin:0;flex:1;min-width:0;font-weight:700;font-size:16px;line-height:1.3}
+
+/* Sprechblase & Wesen */
+.crt{display:block;width:100%;height:auto;overflow:visible}
+.bubble{position:relative;background:#fff;border:2px solid var(--line);border-radius:18px;padding:10px 12px;font-weight:700;font-size:17px;line-height:1.3;min-width:0}
+.bubble::before{content:"";position:absolute;left:-11px;bottom:18px;width:18px;height:18px;background:#fff;border-left:2px solid var(--line);border-bottom:2px solid var(--line);transform:rotate(45deg);border-radius:0 0 0 4px}
+.host{display:flex;align-items:flex-end;gap:14px;width:100%}
+.hostav{width:78px;flex:none}
+.host .bubble{flex:1;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.host .bubble #prompt{flex:1;min-width:0;text-wrap:balance}
+
+/* Haus innen */
+.hhead{display:flex;align-items:center;gap:10px}
+.hhead h2{font-size:28px;font-weight:800;flex:1;min-width:0}
+.scene{position:relative;border-radius:24px;overflow:hidden;border:3px solid var(--acc);background:linear-gradient(to bottom,var(--wall) 0 70%,var(--floor) 70%);padding:14px 14px 0;display:grid;grid-template-columns:minmax(110px,38%) 1fr;align-items:end;gap:12px;min-height:230px}
+.scene .win{position:absolute;top:14px;left:16px;width:60px;height:60px}
+.scene .crtbig{position:relative;align-self:end;padding-bottom:6px}
+.scene .bubble{align-self:start;margin-top:4px;font-size:16px}
+.scene .bubble .say{float:right;margin:0 0 4px 8px}
+.rug{position:absolute;left:4%;bottom:6px;width:36%;height:14px;border-radius:50%;background:var(--acc);opacity:.35}
+.giftline{display:flex;align-items:center;gap:10px;background:var(--cream);border:2px dashed var(--star);border-radius:14px;padding:8px 12px;font-weight:700;font-size:16px}
+.giftline svg{width:34px;height:34px;flex:none}
+
+/* Spiel-Erweiterungen */
+.heart{width:44px;height:44px;border-radius:12px;background:var(--surface);border:2px solid var(--line);display:grid;place-items:center;flex:none}
+.heart svg{width:26px;height:26px;fill:none;stroke:var(--red);stroke-width:2.4}
+.heart[aria-pressed="true"] svg{fill:var(--red)}
+.heart.pop{animation:pop .4s}
+.giftc{display:inline-flex;align-items:center;gap:4px;background:var(--cream);border:2px solid var(--star);border-radius:12px;height:44px;padding:0 10px;font-family:var(--font-display);font-weight:800;font-size:22px;flex:none;font-variant-numeric:tabular-nums}
+.giftc svg{width:26px;height:26px}
+.giftc.bump{animation:pop .45s}
+.flygift{position:fixed;z-index:60;width:40px;height:40px;left:0;top:0;pointer-events:none}
+.flygift svg{width:100%;height:100%}
+.conf{position:fixed;z-index:70;left:0;top:0;width:22px;height:22px;pointer-events:none}
+
+/* Ende */
+.gifts{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;max-width:100%}
+.gifts span{width:38px;height:38px;animation:pop .5s backwards}
+.gifts svg{width:100%;height:100%}
+.favlist{width:100%;text-align:left;background:var(--cream);border-radius:16px;padding:12px 14px;border:2px solid #F4DDA0}
+.favlist ul{margin:8px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.favlist li button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:6px;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:6px 8px 6px 10px;font-family:var(--font-display);font-weight:800;font-size:18px;text-align:left;font-variant-numeric:tabular-nums}
+.favlist li button span{min-width:0;overflow-wrap:anywhere}
+.favlist li svg{width:22px;height:22px;flex:none;fill:none;stroke:var(--red);stroke-width:2.4}
+.favlist li button[aria-pressed="true"]{border-color:var(--red);background:#FFF0EF}
+.favlist li button[aria-pressed="true"] svg{fill:var(--red)}
+.done .host{justify-content:center}
+.done .host .bubble{flex:0 1 auto;text-align:left}
+
+/* Mein Haus */
+.myscene{border-radius:24px;overflow:hidden;border:3px solid #fff;box-shadow:0 5px 0 var(--line)}
+.myscene svg{display:block;width:100%;height:auto}
+.steps{display:flex;gap:5px}
+.steps i{flex:1;height:10px;border-radius:99px;background:var(--line)}
+.steps i.on{background:var(--good)}
+.steps i.next{background:var(--star)}
+.build{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.build h3{margin:0;font-family:var(--font-display);font-size:24px;font-weight:800;line-height:1.1}
+.build .sub{margin:0;color:var(--muted);font-size:15px;font-weight:700}
+.needs{display:flex;flex-wrap:wrap;gap:8px}
+.need{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--line);border-radius:12px;padding:4px 10px;font-family:var(--font-display);font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
+.need svg{width:28px;height:28px}
+.need.ok{border-color:var(--good);background:#E3F6EC}
+.big:disabled{opacity:.45;cursor:default}
+.favgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fcard{position:relative;background:var(--surface);border:2px solid var(--line);border-radius:16px;box-shadow:0 3px 0 var(--line);padding:10px 10px 10px 12px;display:flex;flex-direction:column;gap:4px;text-align:left;min-width:0}
+.fcard b{font-family:var(--font-display);font-size:21px;line-height:1.15;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.fcard small{color:var(--muted);font-size:14px;font-weight:700}
+.fwrap{position:relative;min-width:0}
+.fwrap .fcard{width:100%}
+.bar .dots{gap:4px}
+.bar .pdot{width:14px;height:14px}
+.fdel{position:absolute;top:-8px;right:-8px;width:30px;height:30px;border-radius:50%;background:var(--surface);border:2px solid var(--line);font-size:16px;font-weight:700;color:var(--muted);display:grid;place-items:center}
+.locked{display:flex;gap:12px;align-items:center}
+.locked svg{width:54px;height:54px;flex:none}
+.locked p{margin:0;font-weight:700}
+
+/* Einstellungen */
+.field2{display:flex;flex-direction:column;gap:6px}
+.field2 input{font:inherit;font-size:22px;font-family:var(--font-display);font-weight:800;padding:10px 14px;border-radius:14px;border:2px solid var(--line);background:var(--surface);color:var(--ink);width:100%}
+.field2 input:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.danger{color:var(--red);font-weight:700;padding:10px;border-radius:12px;border:2px solid var(--line);background:var(--surface)}
+
+.legal{text-align:center;font-size:15px;color:var(--muted)}
+.legal a{color:var(--muted);font-weight:700;text-underline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Landkarte -->
+  <section id="map" class="view">
+    <div class="top">
+      <div class="brand"><h1>Rechenland</h1></div>
+      <div class="topr">
+        <div class="chip" aria-label="Gesammelte Sterne"><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg><span id="total">0</span></div>
+        <button class="gear" id="openSet" aria-label="Einstellungen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1l-.4-2.6h-4l-.4 2.6a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L4.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1l.4 2.6h4l.4-2.6a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg></button>
+      </div>
+    </div>
+    <div class="matbar" id="matbar"></div>
+    <div class="tip" id="tip"></div>
+    <div class="mapwrap" id="mapwrap"></div>
+    <footer class="legal"><a href="impressum.html">Impressum</a> · <a href="impressum.html#datenschutz">Datenschutz</a></footer>
+  </section>
+
+  <!-- Haus eines Fabelwesens -->
+  <section id="house" class="view" hidden>
+    <div class="hhead">
+      <button class="x" id="hBack" aria-label="Zurück zum Rechenland">←</button>
+      <h2 id="hTitle"></h2>
+    </div>
+    <div class="scene" id="scene"></div>
+    <div class="giftline" id="giftline"></div>
+    <div>
+      <p class="label">Zahlenraum</p>
+      <div class="seg" role="group" aria-label="Zahlenraum">
+        <button id="r10" data-range="10">bis 10</button>
+        <button id="r20" data-range="20">bis 20</button>
+      </div>
+    </div>
+    <div>
+      <p class="label">Was möchtest du üben?</p>
+      <div class="tiles" id="tiles"></div>
+    </div>
+  </section>
+
+  <!-- Spiel -->
+  <section id="play" class="view" hidden>
+    <div class="bar">
+      <button class="x" id="quit" aria-label="Zurück">←</button>
+      <div class="dots" id="dots"></div>
+      <button class="heart" id="favBtn" aria-pressed="false" aria-label="Als Lieblingsaufgabe merken"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.5 4.5 7 4.5c2.1 0 3.6 1.2 5 3 1.4-1.8 2.9-3 5-3 3.5 0 5.6 3.5 4.3 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg></button>
+      <div class="giftc" id="giftc" aria-label="Geschenke in dieser Runde"></div>
+    </div>
+    <div class="meta"><span id="modeLabel"></span><span id="count"></span></div>
+
+    <div class="card">
+      <div class="host">
+        <div class="hostav" id="hostav"></div>
+        <div class="bubble"><span id="prompt"></span><button class="say" id="sayBtn" aria-label="Aufgabe vorlesen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></button></div>
+      </div>
+      <div id="task" class="task"></div>
+      <div class="fb" id="fb" aria-live="polite"></div>
+      <button class="helpbtn" id="helpBtn">Hilfe zeigen</button>
+      <div class="help" id="help" hidden></div>
+    </div>
+
+    <div class="pad" id="pad">
+      <button class="key" data-k="1">1</button><button class="key" data-k="2">2</button><button class="key" data-k="3">3</button>
+      <button class="key" data-k="4">4</button><button class="key" data-k="5">5</button><button class="key" data-k="6">6</button>
+      <button class="key" data-k="7">7</button><button class="key" data-k="8">8</button><button class="key" data-k="9">9</button>
+      <button class="key del" data-k="del" aria-label="Löschen">⌫</button><button class="key" data-k="0">0</button><button class="key ok" data-k="ok">Fertig</button>
+    </div>
+    <div class="cpad" id="cpad" hidden>
+      <button class="key" data-s="<">&lt;<small>kleiner</small></button>
+      <button class="key" data-s="=">=<small>gleich</small></button>
+      <button class="key" data-s=">">&gt;<small>größer</small></button>
+    </div>
+    <button class="big go" id="tapOk" hidden>Fertig</button>
+    <button class="big" id="next" hidden>Weiter</button>
+  </section>
+
+  <!-- Ende einer Runde -->
+  <section id="done" class="view" hidden>
+    <div class="card done">
+      <div class="host"><div class="hostav" id="doneAv"></div><div class="bubble" id="doneSay"></div></div>
+      <div class="gifts" id="gifts"></div>
+      <div class="bigstars" id="bigstars"></div>
+      <h2 id="doneTitle">Geschafft!</h2>
+      <p id="doneText"></p>
+      <div class="favlist" id="favlist">
+        <b>Welche Aufgaben magst du? Tippe aufs Herz, dann kommen sie in dein Haus.</b>
+        <ul id="favPick"></ul>
+      </div>
+      <div class="review" id="review" hidden>
+        <b>Diese Aufgaben üben wir noch einmal:</b>
+        <ul id="reviewList"></ul>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="big go" id="toBuild" hidden>Jetzt an meinem Haus bauen</button>
+      <button class="big" id="again">Neue Runde</button>
+      <button class="big alt" id="practice" hidden>Nur diese Aufgaben üben</button>
+      <button class="big alt" id="toHouse"></button>
+      <button class="big alt" id="toMap">Zum Rechenland</button>
+    </div>
+  </section>
+
+  <!-- Mein Haus -->
+  <section id="mine" class="view" hidden>
+    <div class="hhead">
+      <button class="x" id="mBack" aria-label="Zurück zum Rechenland">←</button>
+      <h2 id="mTitle">Mein Haus</h2>
+    </div>
+    <div class="myscene" id="myscene"></div>
+    <div class="steps" id="steps" aria-hidden="true"></div>
+    <div class="matbar" id="matbar2"></div>
+    <div class="build" id="build"></div>
+    <div class="build" id="favs"></div>
+  </section>
+
+  <!-- Einstellungen -->
+  <section id="settings" class="view" hidden>
+    <div class="hhead">
+      <button class="x" id="sBack" aria-label="Zurück zum Rechenland">←</button>
+      <h2>Einstellungen</h2>
+    </div>
+    <label class="field2" for="nameIn"><span class="label">Wie heißt du?</span><input id="nameIn" type="text" maxlength="16" autocomplete="off" placeholder="Dein Name"></label>
+    <div class="toggles">
+      <button class="tog" id="togSpeak" aria-pressed="false"><span>Vorlesen</span><span class="sw"></span></button>
+      <button class="tog" id="togSound" aria-pressed="true"><span>Töne</span><span class="sw"></span></button>
+    </div>
+    <div class="note">
+      <p><b>Für Eltern:</b> Im Rechenland wohnen vier Fabelwesen. Knopf der Kobold übt Zahlen, Funkel der Drache das Zerlegen, Brummbart der Troll Plus und Minus, Lumi die Fee Sudoku und die Bunte Mischung. Die Themen folgen dem Matheheft der 1. Klasse.</p>
+      <p>Für jede richtig gelöste Aufgabe gibt es ein Geschenk: Holz, Ziegel, Steine oder Kristalle. Damit baut Ihr Kind in 8 Schritten ein eigenes Haus. Ab der Tür kann es hinein und dort seine Lieblingsaufgaben sammeln und nachrechnen. Nichts wird bei Fehlern abgezogen, und es gibt keinen Zeitdruck.</p>
+      <p>Der Fortschritt wird nur in diesem Browser auf diesem Gerät gespeichert.</p>
+    </div>
+    <button class="danger" id="reset">Alles zurücksetzen</button>
+    <footer class="legal"><a href="impressum.html">Impressum</a> · <a href="impressum.html#datenschutz">Datenschutz</a></footer>
+  </section>
+
+</div>
+
+<script>
+(function(){
+const STAR='<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>';
+const STAR_OFF=STAR.replace('class="star"','class="star off"');
+const I_HOUSE='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12 3 2 11h3v10h14V11h3z"/></svg>';
+const I_DICE='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4" fill="#fff"/><g style="fill:var(--c)"><circle cx="8" cy="8" r="1.7"/><circle cx="16" cy="8" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="8" cy="16" r="1.7"/><circle cx="16" cy="16" r="1.7"/></g></svg>';
+const I_BOX='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M12 6v13"/><circle cx="7.5" cy="12.5" r="1.4" fill="#fff"/><path d="M14 9.5h5M14 12.5h5M14 15.5h5" stroke-width="1.6"/></svg>';
+const I_STORY='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H10l-5 4v-4H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/></svg>';
+const I_GRID='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2.2"/><path d="M12 3v18M3 12h18" stroke-width="2.6"/><path d="M7.5 3v18M16.5 3v18M3 7.5h18M3 16.5h18" stroke-width="1"/></svg>';
+
+const MODES=[
+  {id:'zaehlen',name:'Zählen',desc:'Wie viele Plättchen?',icon:'●',c:'var(--blue)'},
+  {id:'blitz',name:'Blitzblick',desc:'Rechenstreifen und Würfel schnell erkennen',icon:I_DICE,c:'var(--red)'},
+  {id:'reihe',name:'Zahlenreihe',desc:'Springen vorwärts und rückwärts',icon:'+2',c:'var(--star)'},
+  {id:'nachbar',name:'Nachbarzahlen',desc:'Was kommt davor, danach?',icon:'±1',c:'var(--good)'},
+  {id:'vergleich',name:'Vergleichen',desc:'kleiner, größer, gleich',icon:'&lt;',c:'var(--teal)'},
+  {id:'ordnung',name:'Ordnungszahlen',desc:'An welcher Stelle?',icon:'1.',c:'var(--blue)'},
+  {id:'haus',name:'Zahlenhaus',desc:'Zahlen zerlegen',icon:I_HOUSE,c:'var(--red)'},
+  {id:'box',name:'Schüttelbox',desc:'Wie viele sind versteckt?',icon:I_BOX,c:'var(--blue)'},
+  {id:'immer',name:'Immer gleich viel',desc:'Dazumalen oder wegstreichen',icon:'=',c:'var(--teal)'},
+  {id:'plus',name:'Plus',desc:'Zusammenrechnen',icon:'+',c:'var(--red)'},
+  {id:'minus',name:'Minus',desc:'Wegnehmen',icon:'−',c:'var(--blue)'},
+  {id:'ergaenzen',name:'Ergänzen',desc:'Wie viel fehlt?',icon:'?',c:'var(--teal)'},
+  {id:'drei',name:'Drei Zahlen',desc:'Zusammenfassen',icon:'+&#8202;+',c:'var(--good)'},
+  {id:'geschichte',name:'Rechengeschichten',desc:'Dazu oder weg?',icon:I_STORY,c:'var(--star)'},
+  {id:'familie',name:'Aufgabenfamilien',desc:'Tausch- und Umkehraufgabe',icon:I_HOUSE,c:'var(--teal)'},
+  {id:'muster',name:'Aufgabenmuster',desc:'Was fällt dir auf?',icon:'↗',c:'var(--blue)'},
+  {id:'sudoku',name:'Sudoku',desc:'Knobeln mit 1 bis 4',icon:I_GRID,c:'var(--red)'},
+  {id:'mix',name:'Bunte Mischung',desc:'Von allem etwas',icon:'★',c:'var(--star)'}
+];
+const GROUPS=[
+  {t:'Zahlen kennenlernen',ids:['zaehlen','blitz','reihe','nachbar','vergleich','ordnung']},
+  {t:'Zerlegen',ids:['haus','box','immer']},
+  {t:'Plus und Minus',ids:['plus','minus','ergaenzen','drei','geschichte','familie','muster']},
+  {t:'Knobeln und Mischen',ids:['sudoku','mix']}
+];
+const MIXABLE=MODES.map(m=>m.id).filter(id=>id!=='mix'&&id!=='sudoku');
+const PRAISE=['Super!','Richtig!','Toll gemacht!','Klasse!','Stark!','Prima!','Genau!'];
+const STORY_PLUS=[
+  {e:'🐟',pl:'Fische',vp:'schwimmen dazu',vs:'schwimmt dazu'},
+  {e:'🐦',pl:'Vögel',vp:'fliegen dazu',vs:'fliegt dazu'},
+  {e:'🐞',pl:'Marienkäfer',vp:'krabbeln dazu',vs:'krabbelt dazu'},
+  {e:'🦆',pl:'Enten',vp:'schwimmen dazu',vs:'schwimmt dazu'},
+  {e:'🐑',pl:'Schafe',vp:'kommen dazu',vs:'kommt dazu'}
+];
+const STORY_MINUS=[
+  {e:'🐦',pl:'Vögel',vp:'fliegen weg',vs:'fliegt weg'},
+  {e:'🐑',pl:'Schafe',vp:'gehen in den Stall',vs:'geht in den Stall'},
+  {e:'🍪',pl:'Kekse',vp:'werden aufgegessen',vs:'wird aufgegessen'},
+  {e:'🎈',pl:'Luftballons',vp:'platzen',vs:'platzt'},
+  {e:'🐟',pl:'Fische',vp:'schwimmen weg',vs:'schwimmt weg'}
+];
+const QUEUES=[
+  {e:'🐥',x:'🐸',name:'der Frosch'},
+  {e:'🚗',x:'🚌',name:'der Bus'},
+  {e:'🐑',x:'🐷',name:'das Schwein'},
+  {e:'🍦',x:'🍓',name:'die Erdbeere'},
+  {e:'🐟',x:'🐙',name:'der Tintenfisch'}
+];
+const PIPS={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+
+/* ---------- Speicher ---------- */
+const KEY='rechenland-v1';
+const MATKEYS=['holz','ziegel','stein','kristall'];
+const DEF=()=>({stars:0,best:{},range:10,speak:false,sound:true,name:'',mat:{holz:0,ziegel:0,stein:0,kristall:0},built:0,favs:[]});
+let store=DEF();
+try{const s=JSON.parse(localStorage.getItem(KEY));if(s){store=Object.assign(DEF(),s);store.mat=Object.assign(DEF().mat,s.mat||{});if(!Array.isArray(store.favs))store.favs=[];}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}}
+
+/* ---------- Helfer ---------- */
+const $=s=>document.querySelector(s);
+const rand=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const fill=(n,t)=>Array(Math.max(0,n)).fill(t);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const VIEWS=['map','house','play','done','mine','settings'];
+function show(id){VIEWS.forEach(s=>$('#'+s).hidden=(s!==id));window.scrollTo(0,0);}
+const reduced=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){return false;}};
+
+/* ---------- Ton & Sprache ---------- */
+let ac=null;
+function tone(seq){
+  if(!store.sound)return;
+  try{
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    let t=ac.currentTime;
+    seq.forEach(([f,d])=>{
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.type='sine';o.frequency.value=f;
+      g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.18,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+      o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d+.02);t+=d*.8;
+    });
+  }catch(e){}
+}
+const hasSpeech='speechSynthesis' in window;
+function speak(text,force){
+  if(!hasSpeech||(!store.speak&&!force))return;
+  try{
+    const s=window.speechSynthesis;s.cancel();
+    const u=new SpeechSynthesisUtterance(text);u.lang='de-DE';u.rate=.9;
+    const v=s.getVoices().find(v=>v.lang&&v.lang.toLowerCase().startsWith('de'));if(v)u.voice=v;
+    s.speak(u);
+  }catch(e){}
+}
+if(hasSpeech){try{speechSynthesis.getVoices();}catch(e){}}
+
+/* ---------- Aufgaben erzeugen ---------- */
+function makeSudoku(){
+  const base=[[1,2,3,4],[3,4,1,2],[2,1,4,3],[4,3,2,1]];
+  const p=shuffle([1,2,3,4]);
+  let g=base.map(r=>r.map(v=>p[v-1]));
+  const rowOps=g=>{let r=[0,1,2,3];if(Math.random()<.5)[r[0],r[1]]=[r[1],r[0]];if(Math.random()<.5)[r[2],r[3]]=[r[3],r[2]];if(Math.random()<.5)r=[r[2],r[3],r[0],r[1]];return r.map(i=>g[i]);};
+  const T=g=>g[0].map((_,c)=>g.map(r=>r[c]));
+  g=rowOps(g);g=T(rowOps(T(g)));
+  const tr=rand(0,3),tc=rand(0,3),unit=pick(['row','col','box']);
+  const inUnit=(r,c)=>unit==='row'?r===tr:unit==='col'?c===tc:(r>>1)===(tr>>1)&&(c>>1)===(tc>>1);
+  const cands=[];
+  for(let r=0;r<4;r++)for(let c=0;c<4;c++)if(!inUnit(r,c))cands.push(r+','+c);
+  const blank=shuffle(cands).slice(0,rand(3,6));blank.push(tr+','+tc);
+  return {mode:'sudoku',g,tr,tc,unit,blank,ans:g[tr][tc],key:'s'+g.flat().join('')+tr+tc};
+}
+function gen(mode,R){
+  let a,b,c,n,k;
+  switch(mode){
+    case 'plus':
+      if(R===20&&Math.random()<.5){a=rand(2,9);b=rand(11-a,9);}
+      else{a=rand(1,R-1);b=rand(1,R-a);}
+      return {mode,a,b,ans:a+b,key:`p${a}-${b}`};
+    case 'minus':
+      if(R===20&&Math.random()<.4){a=rand(11,18);b=rand(a-9,9);}
+      else{a=rand(2,R);b=rand(1,a-1);}
+      return {mode,a,b,ans:a-b,key:`m${a}-${b}`};
+    case 'ergaenzen':
+      c=rand(3,R);a=rand(1,c-1);
+      return {mode,a,c,ans:c-a,key:`e${a}-${c}`};
+    case 'haus':
+      n=rand(3,R);k=rand(1,n-1);
+      return {mode,n,k,side:Math.random()<.5?'l':'r',ans:n-k,key:`h${n}-${k}`};
+    case 'zaehlen':
+      n=R===20?rand(6,20):rand(1,10);
+      return {mode,n,ans:n,key:`z${n}`};
+    case 'vergleich':
+      a=rand(0,R);
+      if(Math.random()<.2)b=a;else{do{b=rand(0,R);}while(b===a);}
+      return {mode,a,b,ans:a<b?'<':a>b?'>':'=',key:`v${a}-${b}`};
+    case 'nachbar':{
+      const vor=Math.random()<.5;
+      n=vor?rand(1,R):rand(0,R-1);
+      return {mode,n,vor,ans:vor?n-1:n+1,key:`n${n}${vor}`};
+    }
+    case 'blitz':{
+      const kind=pick(['streifen','streifen','wuerfel','wuerfel2']);
+      if(kind==='streifen'){n=R===20?rand(6,20):rand(1,10);return {mode,kind,n,ans:n,key:`bs${n}`};}
+      if(kind==='wuerfel'){n=rand(1,6);return {mode,kind,a:n,n,ans:n,key:`bw${n}`};}
+      a=rand(1,6);b=rand(1,6);while(R===10&&a+b>10)b=rand(1,6);
+      return {mode,kind,a,b,n:a+b,ans:a+b,key:`bd${a}-${b}`};
+    }
+    case 'reihe':{
+      const step=pick(R===10?[1,1,2,2,3]:[1,2,2,3,3]),dir=pick([1,-1]);
+      const len=Math.min(R===10?5:6,Math.floor(R/step)+1),span=step*(len-1);
+      const start=dir>0?rand(0,R-span):rand(span,R);
+      const seq=[...Array(len)].map((_,i)=>start+dir*step*i);
+      const gap=rand(2,len-1);
+      return {mode,seq,gap,step,dir,ans:seq[gap],key:`r${seq.join('-')}g${gap}`};
+    }
+    case 'ordnung':{
+      n=rand(5,R===10?8:10);k=rand(1,n);const s=pick(QUEUES);
+      return {mode,n,k,s,ans:k,key:`o${n}-${k}-${s.x}`};
+    }
+    case 'box':
+      n=rand(2,R===10?10:16);k=rand(0,n);
+      return {mode,n,k,hide:pick(['l','r']),ans:n-k,key:`x${n}-${k}`};
+    case 'immer':{
+      const T=R===10?rand(3,9):rand(6,17);let s;
+      do{s=rand(Math.max(1,T-4),Math.min(R,T+4));}while(s===T);
+      const init=fill(R,'e');shuffle([...Array(R).keys()]).slice(0,s).forEach(i=>init[i]='r');
+      return {mode,T,s,init,ans:T,key:`i${T}-${s}`};
+    }
+    case 'drei':
+      a=rand(1,R===10?6:9);b=rand(1,Math.min(R-a-1,R===10?5:9));c=rand(1,Math.min(R-a-b,R===10?5:9));
+      return {mode,a,b,c,ans:a+b+c,key:`d${a}-${b}-${c}`};
+    case 'geschichte':{
+      const plus=Math.random()<.5;
+      if(plus){a=rand(2,8);b=rand(1,10-a);}else{a=rand(3,10);b=rand(1,a-1);}
+      const s=pick(plus?STORY_PLUS:STORY_MINUS);
+      return {mode,plus,a,b,s,ans:plus?a+b:a-b,key:`g${plus}${a}-${b}`};
+    }
+    case 'familie':{
+      c=rand(3,R);a=rand(1,c-1);if(a*2===c)a--;b=c-a;
+      const v=pick(['tausch','umkehr','umkehr2','umkehrM']);
+      return {mode,a,b,c,v,ans:v==='tausch'||v==='umkehrM'?c:v==='umkehr'?a:b,key:`f${a}-${b}-${v}`};
+    }
+    case 'muster':{
+      const type=pick(['plusA','plusB','zerl','minusA','minusC']);let rows;
+      if(type==='plusA'){const x=rand(1,R-4),y=rand(0,R-x-3);rows=[0,1,2,3].map(i=>[x,'+',y+i,'=',x+y+i]);}
+      else if(type==='plusB'){const y=rand(1,R-4),x=rand(0,R-y-3);rows=[0,1,2,3].map(i=>[x+i,'+',y,'=',x+y+i]);}
+      else if(type==='zerl'){n=rand(5,R);const i0=rand(0,n-3);rows=[0,1,2,3].map(i=>[n,'=',i0+i,'+',n-i0-i]);}
+      else if(type==='minusA'){const x=rand(4,R),y=rand(0,x-3);rows=[0,1,2,3].map(i=>[x,'−',y+i,'=',x-y-i]);}
+      else{const r=rand(0,R-4),y=rand(0,R-r-3);rows=[0,1,2,3].map(i=>[r+y+i,'−',y+i,'=',r]);}
+      const ans=rows[3][4];
+      return {mode,type,rows,ans,key:`u${type}${rows[0].join('')}`};
+    }
+    case 'sudoku':return makeSudoku();
+  }
+}
+function makeTasks(mode,R,count){
+  const out=[],seen=new Set();let guard=0;
+  while(out.length<count&&guard++<500){
+    const t=gen(mode==='mix'?pick(MIXABLE):mode,R);
+    if(seen.has(t.key)&&guard<400)continue;
+    seen.add(t.key);t.R=R;out.push(t);
+  }
+  return out;
+}
+
+/* ---------- Darstellung ---------- */
+const SLOT='<span class="slot" id="slot">?</span>';
+const N=x=>`<span class="num">${x}</span>`,O=x=>`<span class="op">${x}</span>`;
+function field(cap,spec,numbered){
+  let h='<div class="field" aria-hidden="true">';
+  for(let r=0;r<cap/10;r++){
+    h+='<div class="frow">';
+    for(let g=0;g<2;g++){
+      h+='<div class="grp">';
+      for(let c=0;c<5;c++){
+        const i=r*10+g*5+c,t=spec[i]||'e';
+        h+=`<span class="cell ${t}">${numbered&&t!=='e'?i+1:''}</span>`;
+      }
+      h+='</div>';
+    }
+    h+='</div>';
+  }
+  return h+'</div>';
+}
+const die=n=>`<span class="die" aria-hidden="true">${[0,1,2,3,4,5,6,7,8].map(i=>`<i class="${PIPS[n].includes(i)?'p':''}"></i>`).join('')}</span>`;
+function blitzVis(t,numbered){
+  if(t.kind==='streifen')return field(t.R,fill(t.n,'r'),numbered);
+  return `<div class="dice">${die(t.a)}${t.kind==='wuerfel2'?die(t.b):''}</div>`;
+}
+function famEq(t){
+  const {a,b,c,v}=t;
+  if(v==='tausch')return {given:`${a} + ${b} = ${c}`,label:'Tauschaufgabe',parts:[b,'+',a,'=','?'],say:`${a} plus ${b} gleich ${c}. Wie viel ist ${b} plus ${a}?`};
+  if(v==='umkehr')return {given:`${a} + ${b} = ${c}`,label:'Umkehraufgabe',parts:[c,'−',b,'=','?'],say:`${a} plus ${b} gleich ${c}. Wie viel ist ${c} minus ${b}?`};
+  if(v==='umkehr2')return {given:`${a} + ${b} = ${c}`,label:'Umkehraufgabe',parts:[c,'−',a,'=','?'],say:`${a} plus ${b} gleich ${c}. Wie viel ist ${c} minus ${a}?`};
+  return {given:`${c} − ${a} = ${b}`,label:'Umkehraufgabe',parts:[b,'+',a,'=','?'],say:`${c} minus ${a} gleich ${b}. Wie viel ist ${b} plus ${a}?`};
+}
+function storySentence(t){
+  const s=t.s;
+  return `Es sind ${t.a} ${s.pl}. ${t.b} ${t.b===1?s.vs:s.vp}. Wie viele sind es dann?`;
+}
+function queueHTML(t,numbered){
+  let h='<div class="queue" aria-hidden="true"><span class="qi">🚩'+(numbered?'<small>&nbsp;</small>':'')+'</span>';
+  for(let i=1;i<=t.n;i++)h+=`<span class="qi ${i===t.k?'hit':''}">${i===t.k?t.s.x:t.s.e}${numbered?`<small>${i}.</small>`:''}</span>`;
+  return h+'</div>';
+}
+function sudokuHTML(t,withSlot,hl){
+  const bl=new Set(t.blank);
+  const inUnit=(r,c)=>t.unit==='row'?r===t.tr:t.unit==='col'?c===t.tc:(r>>1)===(t.tr>>1)&&(c>>1)===(t.tc>>1);
+  let h='<div class="sudo">';
+  for(let r=0;r<4;r++)for(let c=0;c<4;c++){
+    const tgt=r===t.tr&&c===t.tc,isBlank=bl.has(r+','+c);
+    const cls=`sc r${r} c${c}${isBlank&&!tgt?' blank':''}${hl&&inUnit(r,c)?' hl':''}`;
+    h+=`<span class="${cls}">${tgt?(withSlot?SLOT:'?'):isBlank?'':t.g[r][c]}</span>`;
+  }
+  return h+'</div>';
+}
+function promptText(t){
+  switch(t.mode){
+    case 'plus':return 'Rechne plus.';
+    case 'minus':return 'Rechne minus.';
+    case 'ergaenzen':return 'Wie viel fehlt?';
+    case 'haus':return 'Welche Zahl fehlt im Haus?';
+    case 'zaehlen':return 'Wie viele Plättchen siehst du?';
+    case 'vergleich':return 'Kleiner, größer oder gleich?';
+    case 'nachbar':return `Welche Zahl kommt ${t.vor?'vor':'nach'} der ${t.n}?`;
+    case 'blitz':return 'Schau genau hin! Wie viele sind es?';
+    case 'reihe':return 'Welche Zahl fehlt in der Zahlenreihe?';
+    case 'ordnung':return `An welcher Stelle steht ${t.s.name}? Zähle ab der Fahne.`;
+    case 'box':return `In der Schüttelbox sind ${t.n} Plättchen. Wie viele sind unter dem Deckel?`;
+    case 'immer':return `Immer ${t.T}! Male Plättchen dazu oder streiche welche weg.`;
+    case 'drei':return 'Rechne alle drei Zahlen zusammen.';
+    case 'geschichte':return storySentence(t);
+    case 'familie':return `Löse die ${famEq(t).label}.`;
+    case 'muster':return 'Was fällt dir auf? Setze das Muster fort.';
+    case 'sudoku':return 'Welche Zahl gehört in das Feld?';
+  }
+}
+function sayText(t){
+  switch(t.mode){
+    case 'plus':return `Wie viel ist ${t.a} plus ${t.b}?`;
+    case 'minus':return `Wie viel ist ${t.a} minus ${t.b}?`;
+    case 'ergaenzen':return `${t.a} plus wie viel ist ${t.c}?`;
+    case 'haus':return `Im Zahlenhaus steht oben die ${t.n}. Unten steht die ${t.k}. Welche Zahl fehlt?`;
+    case 'vergleich':return `Ist ${t.a} kleiner, größer oder gleich ${t.b}?`;
+    case 'blitz':return 'Schau genau hin! Wie viele Punkte siehst du?';
+    case 'drei':return `Wie viel ist ${t.a} plus ${t.b} plus ${t.c}?`;
+    case 'familie':return famEq(t).say;
+    case 'muster':return 'Schau dir die Aufgaben an. Was fällt dir auf? Welche Zahl fehlt in der letzten Aufgabe?';
+    case 'sudoku':return 'Welche Zahl gehört in das Feld mit dem Fragezeichen? In jeder Reihe, jeder Spalte und jedem Viereck stehen 1, 2, 3 und 4 genau einmal.';
+    default:return promptText(t);
+  }
+}
+function taskHTML(t){
+  switch(t.mode){
+    case 'plus':return `<div class="eq">${N(t.a)}${O('+')}${N(t.b)}${O('=')}${SLOT}</div>`;
+    case 'minus':return `<div class="eq">${N(t.a)}${O('−')}${N(t.b)}${O('=')}${SLOT}</div>`;
+    case 'ergaenzen':return `<div class="eq">${N(t.a)}${O('+')}${SLOT}${O('=')}${N(t.c)}</div>`;
+    case 'haus':{
+      const known=`<div class="room">${t.k}</div>`,miss=`<div class="room">${SLOT}</div>`;
+      return `<div class="house"><div class="roof">${t.n}</div><div class="rooms">${t.side==='l'?known+miss:miss+known}</div></div>`;
+    }
+    case 'zaehlen':return field(t.R,fill(t.n,'r'))+`<div class="eq solo">${SLOT}</div>`;
+    case 'vergleich':return `<div class="eq">${N(t.a)}${SLOT}${N(t.b)}</div>`;
+    case 'nachbar':return `<div class="eq">${t.vor?SLOT+`<span class="box">${t.n}</span>`:`<span class="box">${t.n}</span>`+SLOT}</div>`;
+    case 'blitz':return `<div class="blitz" id="blitzVis">${blitzVis(t)}<div class="cover" aria-hidden="true">?</div></div><button class="helpbtn" id="reshow" type="button">Nochmal zeigen</button><div class="eq solo">${SLOT}</div>`;
+    case 'reihe':return `<div class="reihe">${t.seq.map((v,i)=>`<span class="rc">${i===t.gap?SLOT:v}</span>`).join('')}</div>`;
+    case 'ordnung':return queueHTML(t,false)+`<div class="eq solo">${SLOT}<span>.</span></div>`;
+    case 'box':{
+      const dots=`<div class="scomp">${fill(t.k,'<span class="sd"></span>').join('')}</div>`,lid='<div class="scomp"><div class="lid">?</div></div>';
+      const kn=`<span>${t.k}</span>`,sl=`<span>${SLOT}</span>`;
+      return `<div class="sbox-wrap"><div class="stop">${t.n}</div><div class="sbox">${t.hide==='r'?dots+lid:lid+dots}</div><div class="sparts">${t.hide==='r'?kn+sl:sl+kn}</div></div>`;
+    }
+    case 'immer':return `<div class="immer-t">Immer <b>${t.T}</b></div><div class="tapgrid" id="tapgrid"></div><p class="hint">Tippe auf einen leeren Kreis, um ein Plättchen dazuzumalen. Tippe auf ein rotes Plättchen, um es wegzustreichen.</p>`;
+    case 'drei':return `<div class="eq sm">${N(t.a)}${O('+')}${N(t.b)}${O('+')}${N(t.c)}${O('=')}${SLOT}</div>`;
+    case 'geschichte':{
+      const s=t.s,E=(n,cls)=>fill(n,`<span class="${cls||''}">${s.e}</span>`).join('');
+      const p2=t.plus?E(t.a)+E(t.b,'new'):E(t.a-t.b)+E(t.b,'gone');
+      return `<div class="story" aria-hidden="true">
+        <div class="pan"><div class="pics">${E(t.a)}</div><small>Es sind ${t.a}.</small></div>
+        <div class="pan"><div class="pics">${p2}</div><small>${t.b} ${t.plus?'dazu':'weg'}.</small></div>
+        <div class="pan"><div class="pics q">?</div><small>Dann sind es …</small></div>
+      </div><div class="eq solo">${SLOT}</div>`;
+    }
+    case 'familie':{
+      const f=famEq(t),nums=shuffle([t.a,t.b,t.c]);
+      const tgt=f.parts.map(p=>p==='?'?SLOT:(p==='+'||p==='−'||p==='=')?O(p):N(p)).join('');
+      return `<div class="house fam"><div class="roof">${nums.map(x=>`<span>${x}</span>`).join('')}</div><div class="fbody">
+        <div class="fline given"><small>Aufgabe</small><div class="eq">${f.given}</div></div>
+        <div class="fline"><small>${f.label}</small><div class="eq">${tgt}</div></div></div></div>`;
+    }
+    case 'muster':return `<div class="muster">${t.rows.map((r,ri)=>r.map((x,ci)=>ri===3&&ci===4?SLOT:(x==='+'||x==='−'||x==='=')?O(x):`<span>${x}</span>`).join('')).join('')}</div>`;
+    case 'sudoku':return sudokuHTML(t,true,false);
+  }
+}
+function helpHTML(t){
+  switch(t.mode){
+    case 'plus':return field(t.R,fill(t.a,'r').concat(fill(t.b,'b')))+`<p>${t.a} rote und ${t.b} blaue Plättchen. Wie viele sind es zusammen?</p>`;
+    case 'minus':return field(t.R,fill(t.a-t.b,'r').concat(fill(t.b,'x')))+`<p>Von ${t.a} Plättchen werden ${t.b} weggenommen. Wie viele bleiben übrig?</p>`;
+    case 'ergaenzen':return field(t.R,fill(t.a,'r').concat(fill(t.c-t.a,'o')))+`<p>${t.a} sind schon da. Wie viele leere Kreise fehlen bis ${t.c}?</p>`;
+    case 'haus':return field(t.R,fill(t.k,'r').concat(fill(t.n-t.k,'o')))+`<p>${t.n} Plättchen gehören ins Haus. ${t.k} sind rot. Wie viele leere Kreise sind es?</p>`;
+    case 'zaehlen':return field(t.R,fill(t.n,'r'),true)+`<p>Tipp: Eine Fünfer-Gruppe hat 5 Plättchen. Eine volle Reihe hat 10.</p>`;
+    case 'vergleich':
+      return `<div class="cmp"><b>${t.a}</b>${field(t.R,fill(t.a,'r'))}</div><div class="cmp"><b>${t.b}</b>${field(t.R,fill(t.b,'b'))}</div><p>Wo sind mehr Plättchen? Die Spitze von &lt; und &gt; zeigt immer zur kleineren Zahl.</p>`;
+    case 'nachbar':{
+      const lo=Math.max(0,Math.min(t.n,t.ans)-3),hi=Math.min(t.R,Math.max(t.n,t.ans)+3);
+      let h='<div class="scroll"><div class="nline">';
+      for(let k=lo;k<=hi;k++)h+=`<span class="tick ${k===t.n?'hi':k===t.ans?'q':''}">${k===t.ans?'?':k}</span>`;
+      return h+`</div></div><p>${t.vor?'Vor':'Nach'} einer Zahl kommt die Zahl, die um 1 ${t.vor?'kleiner':'größer'} ist.</p>`;
+    }
+    case 'blitz':return blitzVis(t,true)+`<p>${t.kind==='streifen'?'Tipp: Erst die Fünfer sehen, dann den Rest zählen.':'Zähle die Punkte auf dem Würfel.'}</p>`;
+    case 'reihe':{
+      const lo=Math.max(0,Math.min(...t.seq)-1),hi=Math.min(t.R,Math.max(...t.seq)+1);
+      let h='<div class="scroll"><div class="nline">';
+      for(let k=lo;k<=hi;k++){const i=t.seq.indexOf(k);h+=`<span class="tick ${i===t.gap?'q':i>=0?'hi':''}">${i===t.gap?'?':k}</span>`;}
+      return h+`</div></div><p>Die Zahlen springen immer ${t.step===1?'um 1':`in ${t.step}er-Schritten`} ${t.dir>0?'vorwärts':'rückwärts'}.</p>`;
+    }
+    case 'ordnung':return queueHTML(t,true)+'<p>Zähle von der Fahne aus: 1., 2., 3. …</p>';
+    case 'box':return field(t.R,fill(t.k,'r').concat(fill(t.n-t.k,'o')))+`<p>${t.n} Plättchen sind in der Box. ${t.k} siehst du. Wie viele leere Kreise sind es?</p>`;
+    case 'immer':return '<p>Zähle die roten und blauen Plättchen. Durchgestrichene zählen nicht mit. Zu viele? Streiche weg. Zu wenige? Male dazu.</p>';
+    case 'drei':return field(t.R,fill(t.a,'r').concat(fill(t.b,'b'),fill(t.c,'g')))+`<p>Rechne erst ${t.a} + ${t.b}, dann + ${t.c}.</p>`;
+    case 'geschichte':return (t.plus?field(10,fill(t.a,'r').concat(fill(t.b,'b'))):field(10,fill(t.a-t.b,'r').concat(fill(t.b,'x'))))+`<p>${t.plus?`${t.a} sind da und ${t.b} kommen dazu.`:`${t.a} sind da und ${t.b} gehen weg.`} Das ist eine ${t.plus?'Plus':'Minus'}aufgabe.</p>`;
+    case 'familie':return field(t.R,fill(t.a,'r').concat(fill(t.b,'b')))+`<p>Die drei Zahlen gehören zusammen: ${t.a} und ${t.b} sind zusammen ${t.c}.</p>`;
+    case 'muster':{
+      const tx={plusA:'Die erste Zahl bleibt gleich. Die zweite Zahl wird immer um 1 größer. Dann wird auch das Ergebnis immer um 1 größer.',
+        plusB:'Die erste Zahl wird immer um 1 größer. Die zweite Zahl bleibt gleich. Dann wird auch das Ergebnis immer um 1 größer.',
+        zerl:'Die erste Zahl unten wird immer um 1 größer. Die zweite wird immer um 1 kleiner.',
+        minusA:'Die erste Zahl bleibt gleich. Die zweite Zahl wird immer um 1 größer. Dann wird das Ergebnis immer um 1 kleiner.',
+        minusC:'Beide Zahlen werden immer um 1 größer. Das Ergebnis bleibt gleich.'};
+      return `<p>${tx[t.type]}</p>`;
+    }
+    case 'sudoku':return sudokuHTML(t,false,true)+`<p>Schau dir ${t.unit==='row'?'die gelbe Reihe':t.unit==='col'?'die gelbe Spalte':'das gelbe Viereck'} an. Welche Zahl von 1 bis 4 fehlt dort noch?</p>`;
+  }
+}
+function solutionText(t){
+  switch(t.mode){
+    case 'plus':return `${t.a} + ${t.b} = ${t.ans}`;
+    case 'minus':return `${t.a} − ${t.b} = ${t.ans}`;
+    case 'ergaenzen':return `${t.a} + ${t.ans} = ${t.c}`;
+    case 'haus':return `${t.n} = ${t.k} + ${t.ans}`;
+    case 'zaehlen':return `${t.n} Plättchen`;
+    case 'vergleich':return `${t.a} ${t.ans==='<'?'&lt;':t.ans==='>'?'&gt;':'='} ${t.b}`;
+    case 'nachbar':return t.vor?`${t.ans}, ${t.n}`:`${t.n}, ${t.ans}`;
+    case 'blitz':return t.kind==='wuerfel2'?`${t.a} + ${t.b} = ${t.n}`:`${t.n} Punkte`;
+    case 'reihe':return t.seq.join(', ');
+    case 'ordnung':return `${t.s.x} ist ${t.k}.`;
+    case 'box':return `${t.n} = ${t.k} + ${t.ans}`;
+    case 'immer':return `Immer ${t.T}`;
+    case 'drei':return `${t.a} + ${t.b} + ${t.c} = ${t.ans}`;
+    case 'geschichte':return `${t.a} ${t.plus?'+':'−'} ${t.b} = ${t.ans}`;
+    case 'familie':return famEq(t).parts.map(p=>p==='?'?t.ans:p).join(' ');
+    case 'muster':return t.rows[3].join(' ');
+    case 'sudoku':return `Sudoku: ${t.ans}`;
+  }
+}
+const inputType=t=>t.mode==='vergleich'?'cmp':t.mode==='immer'?'tap':'num';
+
+/* ---------- Rechenland: Wesen, Häuser, Geschenke ---------- */
+const MATS={
+  holz:{sg:'Holzbrett',pl:'Holzbretter',ein:'ein Holzbrett'},
+  ziegel:{sg:'Ziegel',pl:'Ziegel',ein:'einen Ziegel'},
+  stein:{sg:'Stein',pl:'Steine',ein:'einen Stein'},
+  kristall:{sg:'Kristall',pl:'Kristalle',ein:'einen Kristall'}
+};
+const matN=(k,n)=>`${n} ${n===1?MATS[k].sg:MATS[k].pl}`;
+const MATSVG={
+  holz:'<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="9" width="26" height="14" rx="3" fill="#C98A4B" stroke="#8A5530" stroke-width="2"/><path d="M7 14h10M12 18.5h12" stroke="#8A5530" stroke-width="1.6" stroke-linecap="round"/></svg>',
+  ziegel:'<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="10" width="26" height="13" rx="2" fill="#D9573B" stroke="#A33A24" stroke-width="2"/><path d="M3 16.5h26M12 10v6.5M20 16.5V23" stroke="#A33A24" stroke-width="1.6"/></svg>',
+  stein:'<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 22Q3 12 12 8q8-3 14 3 4 7-1 13-10 4-20-2z" fill="#A7B0BF" stroke="#6E7890" stroke-width="2"/><path d="M11 13q3-2 6-1" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".75"/></svg>',
+  kristall:'<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3l10 9-10 17L6 12z" fill="#7FD6F2" stroke="#2D8FB8" stroke-width="2" stroke-linejoin="round"/><path d="M6 12h20M16 3l-4 9 4 17 4-17z" stroke="#2D8FB8" stroke-width="1.3" fill="none" stroke-linejoin="round"/></svg>'
+};
+const HEART='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.5 4.5 7 4.5c2.1 0 3.6 1.2 5 3 1.4-1.8 2.9-3 5-3 3.5 0 5.6 3.5 4.3 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>';
+
+const HOUSES=[
+  {id:'kobold',who:'Knopf',art:'der Kobold',dat:'Knopf dem Kobold',topic:'Zahlen',ids:GROUPS[0].ids,mat:'holz',
+   wall:'#E4F3D9',floor:'#C9A27A',acc:'#3E9B5B',
+   hello:'Hallo! Ich bin Knopf, der Kobold. Bei mir lernst du die Zahlen kennen. Für jede richtige Aufgabe schenke ich dir ein Holzbrett.',
+   praise:['Hui, richtig!','Klasse!','Hihi, genau!','Super!','Prima!']},
+  {id:'drache',who:'Funkel',art:'der Drache',dat:'Funkel dem Drachen',topic:'Zerlegen',ids:GROUPS[1].ids,mat:'ziegel',
+   wall:'#ECE6FB',floor:'#9AA3B2',acc:'#7B5CD6',
+   hello:'Hallo! Ich bin Funkel, der Drache. Bei mir zerlegst du Zahlen. Mit meinem Feuer brenne ich dir für jede richtige Aufgabe einen Ziegel.',
+   praise:['Feurig gut!','Toll gemacht!','Richtig!','Stark!','Super!']},
+  {id:'troll',who:'Brummbart',art:'der Troll',dat:'Brummbart dem Troll',topic:'Plus & Minus',ids:GROUPS[2].ids,mat:'stein',
+   wall:'#F3EAD8',floor:'#8FB46E',acc:'#6E8F4E',
+   hello:'Brumm! Ich bin Brummbart, der Troll. Bei mir rechnest du Plus und Minus. Für jede richtige Aufgabe schenke ich dir einen Stein aus meinem Berg.',
+   praise:['Brumm, prima!','Richtig!','Steinstark!','Super gemacht!','Klasse!']},
+  {id:'fee',who:'Lumi',art:'die Fee',dat:'Lumi der Fee',topic:'Knobeln',ids:GROUPS[3].ids,mat:'kristall',
+   wall:'#FCE8F1',floor:'#D9B8E8',acc:'#C96D9B',
+   hello:'Hallo! Ich bin Lumi, die Fee. Bei mir wird geknobelt und gemischt. Für jede richtige Aufgabe zaubere ich dir einen Kristall.',
+   praise:['Zauberhaft!','Wunderbar!','Richtig!','Toll!','Glitzergut!']}
+];
+const houseOf=mode=>HOUSES.find(h=>h.ids.includes(mode));
+const H=id=>HOUSES.find(h=>h.id===id);
+
+const STAGES=[
+  {name:'Fundament',akk:'das Fundament',need:{stein:6}},
+  {name:'Wände',akk:'die Wände',need:{holz:8}},
+  {name:'Dach',akk:'das Dach',need:{ziegel:8}},
+  {name:'Tür',akk:'die Tür',need:{holz:5}},
+  {name:'Fenster',akk:'die Fenster',need:{kristall:6}},
+  {name:'Schornstein',akk:'den Schornstein',need:{ziegel:4,stein:4}},
+  {name:'Garten',akk:'den Garten',need:{holz:4,stein:4}},
+  {name:'Fahne und Lichter',akk:'die Fahne und die Lichter',need:{kristall:6,ziegel:4}}
+];
+const DOOR=4; /* ab 4 gebauten Schritten hat das Haus eine Tür */
+
+/* Augen mit Blinzeln */
+const EYE=(x,y,r,p)=>`<g class="eye"><circle cx="${x}" cy="${y}" r="${r}" fill="#fff"/><circle cx="${x+1}" cy="${y+1.5}" r="${p}" fill="#1B2A4A"/><circle cx="${x+2.5}" cy="${y-.5}" r="${p*.35}" fill="#fff"/></g>`;
+const SMILE=(d,w)=>`<path d="${d}" stroke="#1B2A4A" stroke-width="${w||3}" fill="none" stroke-linecap="round"/>`;
+const CREATURES={
+  kobold:`<path d="M38 128Q40 94 60 92q20 2 22 36z" fill="#3E9B5B"/><rect x="42" y="112" width="36" height="6" rx="3" fill="#8A5530"/><circle cx="60" cy="115" r="3.5" fill="#FFB60F"/>
+    <path d="M33 66L6 50l26 30z" fill="#8FD18A"/><path d="M87 66l27-16-26 30z" fill="#8FD18A"/>
+    <circle cx="60" cy="72" r="30" fill="#8FD18A"/>
+    <path d="M28 60c10-11 54-11 64 0L72 12q-6-9-12 0z" fill="#E0443A"/><path d="M28 60c10-8 54-8 64 0" stroke="#B5302A" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="66" cy="9" r="7" fill="#FFB60F"/>
+    ${EYE(48,74,8,4.2)}${EYE(70,74,8,4.2)}
+    <circle cx="41" cy="86" r="5" fill="#F29C9C" opacity=".7"/><circle cx="79" cy="86" r="5" fill="#F29C9C" opacity=".7"/>
+    <ellipse cx="60" cy="83" rx="4" ry="3" fill="#6FBF6A"/>${SMILE('M51 90q9 8 18 0')}`,
+  drache:`<path d="M84 118q26-2 22-22-2-8 8-12" stroke="#7B5CD6" stroke-width="10" fill="none" stroke-linecap="round"/><path d="M112 82l8-6-2 10z" fill="#FF9F43"/>
+    <path d="M32 88Q4 72 10 48q12 16 26 22z" fill="#FF9F43"/><path d="M88 88q28-16 22-40-12 16-26 22z" fill="#FF9F43"/>
+    <ellipse cx="60" cy="106" rx="28" ry="23" fill="#7B5CD6"/><ellipse cx="60" cy="110" rx="17" ry="15" fill="#FFD98A"/><path d="M48 104h24M47 111h26M50 118h20" stroke="#E8B860" stroke-width="2"/>
+    <path d="M40 42l-5-20 13 14zM80 42l5-20-13 14z" fill="#FFD98A"/><path d="M52 36l4-9 4 8 4-8 4 9z" fill="#FF9F43"/>
+    <ellipse cx="60" cy="64" rx="32" ry="28" fill="#8E6FE8"/>
+    <ellipse cx="60" cy="79" rx="18" ry="11" fill="#A58BF0"/><circle cx="54" cy="77" r="2" fill="#4A3590"/><circle cx="66" cy="77" r="2" fill="#4A3590"/>
+    ${EYE(47,58,8.5,4.5)}${EYE(73,58,8.5,4.5)}${SMILE('M51 84q9 6 18 0')}`,
+  troll:`<path d="M22 128q-4-46 38-48 42 2 38 48z" fill="#6E8F4E"/><ellipse cx="60" cy="112" rx="18" ry="12" fill="#86A863"/>
+    <ellipse cx="22" cy="66" rx="10" ry="15" fill="#C9A27A"/><ellipse cx="98" cy="66" rx="10" ry="15" fill="#C9A27A"/>
+    <ellipse cx="60" cy="64" rx="38" ry="34" fill="#D9B48C"/>
+    <path d="M38 38q0-26 12-12 4-22 12-2 8-20 14 4 12-12 8 12z" fill="#E8742C"/><path d="M70 30q8-4 10 2-6 2-10-2z" fill="#5FAE4E"/>
+    <path d="M38 50q8-5 15-1M67 49q7-4 15 1" stroke="#7A4A26" stroke-width="4" fill="none" stroke-linecap="round"/>
+    ${EYE(46,59,6.5,3.6)}${EYE(74,59,6.5,3.6)}
+    <ellipse cx="60" cy="73" rx="13" ry="11" fill="#C98F68"/><ellipse cx="56" cy="70" rx="4" ry="3" fill="#E2B08C"/>
+    <path d="M42 86q18 16 36 0-18 7-36 0z" fill="#8A3B2E"/><rect x="56" y="87" width="7" height="6" rx="1.5" fill="#fff"/>`,
+  fee:`<ellipse cx="34" cy="86" rx="20" ry="30" fill="#BDE7FF" stroke="#8CCFF5" stroke-width="2" opacity=".9" transform="rotate(-28 34 86)"/><ellipse cx="86" cy="86" rx="20" ry="30" fill="#BDE7FF" stroke="#8CCFF5" stroke-width="2" opacity=".9" transform="rotate(28 86 86)"/>
+    <path d="M40 128l10-36h20l10 36z" fill="#F48FB1"/><path d="M44 120q16 6 32 0" stroke="#fff" stroke-width="2" fill="none" opacity=".7"/>
+    <path d="M70 100l18-6" stroke="#FFD7B5" stroke-width="5" stroke-linecap="round"/><path d="M88 96l12-24" stroke="#8B5A2B" stroke-width="3" stroke-linecap="round"/>
+    <path class="tw" d="M101 60l3 7 7 1-5 5 1 7-6-4-6 4 1-7-5-5 7-1z" fill="#FFB60F"/>
+    <circle cx="60" cy="68" r="24" fill="#FFD7B5"/>
+    <path d="M36 68q-3-28 24-28t24 28q-6-14-24-14T36 68z" fill="#8E5CC9"/><circle cx="60" cy="36" r="10" fill="#8E5CC9"/><circle cx="68" cy="31" r="4" fill="#FFB60F"/>
+    ${EYE(51,71,5.5,3.2)}${EYE(69,71,5.5,3.2)}
+    <circle cx="45" cy="80" r="4" fill="#F29C9C" opacity=".7"/><circle cx="75" cy="80" r="4" fill="#F29C9C" opacity=".7"/>${SMILE('M53 82q7 6 14 0',2.6)}
+    <path class="tw" d="M18 40l2 4 4 1-4 2-2 4-2-4-4-2 4-1z" fill="#FFB60F" style="animation-delay:.7s"/>`
+};
+const creature=id=>`<svg class="crt" viewBox="0 0 120 130" aria-hidden="true">${CREATURES[id]}</svg>`;
+
+/* Häuser auf der Karte (Ursprung: Mitte unten) */
+const HOUSEART={
+  kobold:`<path d="M-32 0l4-52h56l4 52z" fill="#FFF3DC" stroke="#E2CDA0" stroke-width="2"/>
+    <path d="M-10 0v-24q10-12 20 0V0z" fill="#9B5B2E"/><circle cx="5" cy="-12" r="1.8" fill="#FFD45C"/>
+    <circle cx="19" cy="-34" r="7" fill="#FFE27A" stroke="#9B5B2E" stroke-width="2.5"/>
+    <path d="M-54-48q2-58 54-60 52 2 54 60-54 9-108 0z" fill="#E0443A"/>
+    <circle cx="-28" cy="-74" r="8" fill="#fff"/><circle cx="6" cy="-92" r="7" fill="#fff"/><circle cx="30" cy="-66" r="6" fill="#fff"/><circle cx="-4" cy="-63" r="4.5" fill="#fff"/><circle cx="-40" cy="-56" r="3.5" fill="#fff"/>`,
+  drache:`<rect x="-26" y="-80" width="52" height="80" fill="#B9C3D6" stroke="#8C97AD" stroke-width="2"/>
+    <path d="M-26-80v-8h8v8m6 0v-8h8v8m6 0v-8h8v8m6 0v-8h8v8" fill="#B9C3D6" stroke="#8C97AD" stroke-width="2"/>
+    <path d="M-20-62h12M4-50h14M-16-30h12M8-18h12" stroke="#8C97AD" stroke-width="2" stroke-linecap="round"/>
+    <path d="M-34-86L0-118l34 32z" fill="#7B5CD6"/><path d="M0-118v-14" stroke="#5A3B22" stroke-width="2.5"/><path d="M0-132l16 5-16 5z" fill="#FF9F43"/>
+    <path d="M-7-48v-12q7-9 14 0v12z" fill="#FFE27A" stroke="#5A6A8A" stroke-width="2"/>
+    <path d="M-13 0v-22q13-16 26 0V0z" fill="#7A4A26"/><circle cx="7" cy="-11" r="1.8" fill="#FFD45C"/>`,
+  troll:`<rect x="24" y="-94" width="12" height="24" fill="#9AA3B2" stroke="#6E7890" stroke-width="2"/>
+    <circle class="smoke" cx="30" cy="-100" r="5" fill="#fff"/><circle class="smoke" cx="32" cy="-104" r="6" fill="#fff" style="animation-delay:1.1s"/><circle class="smoke" cx="28" cy="-102" r="5" fill="#fff" style="animation-delay:2.2s"/>
+    <path d="M-62 0q2-78 62-80 60 2 62 80z" fill="#5FAE4E"/><path d="M-40-50q20-22 50-24" stroke="#86C46A" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M-22 0v-22a22 22 0 0 1 44 0V0z" fill="#9B5B2E" stroke="#6B3E1F" stroke-width="3"/><path d="M-8-40V0M8-40V0" stroke="#6B3E1F" stroke-width="1.6"/><circle cx="13" cy="-16" r="2.5" fill="#FFD45C"/>
+    <circle cx="-40" cy="-34" r="9" fill="#FFE27A" stroke="#6B3E1F" stroke-width="3"/><circle cx="40" cy="-34" r="9" fill="#FFE27A" stroke="#6B3E1F" stroke-width="3"/>
+    <circle cx="-20" cy="-64" r="3" fill="#FFB60F"/><circle cx="-12" cy="-68" r="3" fill="#F48FB1"/><circle cx="12" cy="-70" r="3" fill="#fff"/>`,
+  fee:`<path d="M-16 0q4-50 2-82h28q-2 32 2 82z" fill="#9B6A3E"/><path d="M-6-60q4-8 2-16M6-30q-3-8 0-14" stroke="#7A4E2A" stroke-width="2" fill="none"/>
+    <path d="M-8 0v-14q8-9 16 0V0z" fill="#5A3B22"/>
+    <circle cx="-34" cy="-100" r="30" fill="#4FA86A"/><circle cx="34" cy="-100" r="30" fill="#4FA86A"/><circle cx="0" cy="-126" r="36" fill="#5DB877"/><circle cx="0" cy="-90" r="28" fill="#4FA86A"/>
+    <circle cx="-16" cy="-140" r="10" fill="#7FCB8F" opacity=".7"/><circle cx="40" cy="-112" r="8" fill="#7FCB8F" opacity=".7"/>
+    <rect x="-22" y="-112" width="44" height="32" rx="4" fill="#F6C1D9" stroke="#C96D9B" stroke-width="2"/><path d="M-28-110L0-132l28 22z" fill="#C96D9B"/>
+    <circle cx="0" cy="-96" r="7" fill="#FFF3A0" stroke="#C96D9B" stroke-width="2"/>
+    <path d="M-30-80l-4 80M-22-80l-4 80" stroke="#C99A62" stroke-width="2"/><path d="M-33-60h9M-32-40h9M-31-20h9" stroke="#C99A62" stroke-width="2"/>
+    <path class="tw" d="M-50-140l2 5 5 1-5 2-2 5-2-5-5-2 5-1z" fill="#FFE27A"/><path class="tw" d="M54-80l2 5 5 1-5 2-2 5-2-5-5-2 5-1z" fill="#FFE27A" style="animation-delay:1s"/>`
+};
+
+/* Das eigene Haus, Schritt für Schritt */
+function myHouse(b,grow){
+  const P=(i,s)=>b>i?`<g${grow===i?' class="grow"':''}>${s}</g>`:'';
+  let h='<ellipse cx="0" cy="2" rx="62" ry="11" fill="#C9A06A"/>';
+  if(b===0)h+='<g><ellipse cx="-34" cy="-2" rx="12" ry="6" fill="#B08654"/><rect x="24" y="-8" width="20" height="8" rx="2" fill="#C98A4B"/><rect x="-3" y="-40" width="6" height="42" fill="#8A5530"/><rect x="-36" y="-60" width="72" height="24" rx="5" fill="#F6E3B4" stroke="#8A5530" stroke-width="2"/><text x="0" y="-43" text-anchor="middle" font-family="Baloo 2,Trebuchet MS,sans-serif" font-weight="800" font-size="14" fill="#5A3B22">Bauplatz</text></g>';
+  h+=P(6,`<g>${[-80,-71,-62,62,71,80].map(x=>`<rect x="${x-3}" y="-22" width="6" height="22" rx="2" fill="#fff" stroke="#C9B48A" stroke-width="1.5"/>`).join('')}<path d="M-84-14h26M58-14h26" stroke="#C9B48A" stroke-width="3"/>
+    <path d="M-30 4v-6M-20 6v-6M28 5v-6M38 4v-6" stroke="#3E9B5B" stroke-width="2"/><circle cx="-30" cy="-3" r="4" fill="#F48FB1"/><circle cx="-20" cy="-1" r="4" fill="#FFB60F"/><circle cx="28" cy="-2" r="4" fill="#E0443A"/><circle cx="38" cy="-3" r="4" fill="#8E5CC9"/></g>`);
+  h+=P(5,`<rect x="22" y="-112" width="14" height="32" fill="#C0543A" stroke="#8A3B2E" stroke-width="2"/><circle class="smoke" cx="29" cy="-118" r="5" fill="#fff"/><circle class="smoke" cx="31" cy="-120" r="6" fill="#fff" style="animation-delay:1.2s"/>`);
+  h+=P(1,`<rect x="-44" y="-70" width="88" height="60" fill="#E9B97A" stroke="#9B6A3E" stroke-width="2"/><path d="M-44-58h88M-44-46h88M-44-34h88M-44-22h88" stroke="#C99558" stroke-width="1.5"/>`);
+  if(b>1&&b<=4)h+='<rect x="-36" y="-58" width="18" height="18" fill="#6B4A2E"/><rect x="18" y="-58" width="18" height="18" fill="#6B4A2E"/>';
+  h+=P(4,`<rect x="-36" y="-58" width="18" height="18" fill="#9FE3F5" stroke="#fff" stroke-width="2"/><rect x="18" y="-58" width="18" height="18" fill="#9FE3F5" stroke="#fff" stroke-width="2"/><path d="M-27-58v18M-36-49h18M27-58v18M18-49h18" stroke="#fff" stroke-width="2"/>`);
+  if(b>1&&b<=3)h+='<path d="M-11-10v-28q11-12 22 0v28z" fill="#6B4A2E"/>';
+  h+=P(3,`<path d="M-11-10v-28q11-12 22 0v28z" fill="#8A5530" stroke="#5A3B22" stroke-width="2"/><circle cx="6" cy="-24" r="2" fill="#FFD45C"/>`);
+  h+=P(0,`<rect x="-50" y="-11" width="100" height="12" rx="2" fill="#9AA3B2" stroke="#6E7890" stroke-width="2"/><path d="M-30-11v12M-6-11v12M18-11v12M40-11v12" stroke="#6E7890" stroke-width="1.5"/>`);
+  h+=P(2,`<path d="M-56-68L0-112l56 44z" fill="#D9573B" stroke="#A33A24" stroke-width="2" stroke-linejoin="round"/><path d="M-40-76h80M-25-88h50M-12-98h24" stroke="#A33A24" stroke-width="1.5"/>${b>4?'<circle cx="0" cy="-84" r="6" fill="#9FE3F5" stroke="#fff" stroke-width="2"/>':''}`);
+  h+=P(7,`<path d="M0-112v-24" stroke="#5A3B22" stroke-width="2.5"/><path d="M0-136l22 6-22 6z" fill="#FFB60F"/>
+    ${[.15,.32,.5,.68,.85].map((t,i)=>`<circle class="tw" cx="${(-56+56*t).toFixed(1)}" cy="${(-68-44*t).toFixed(1)}" r="3" fill="${['#FFE27A','#F48FB1','#7FD6F2'][i%3]}" style="animation-delay:${i*.3}s"/><circle class="tw" cx="${(56-56*t).toFixed(1)}" cy="${(-68-44*t).toFixed(1)}" r="3" fill="${['#7FD6F2','#FFE27A','#F48FB1'][i%3]}" style="animation-delay:${i*.3+.15}s"/>`).join('')}
+    <circle cx="-20" cy="-30" r="7" fill="#FFE27A" opacity=".45"/><circle cx="-20" cy="-30" r="3.5" fill="#FFE27A"/><circle cx="20" cy="-30" r="7" fill="#FFE27A" opacity=".45"/><circle cx="20" cy="-30" r="3.5" fill="#FFE27A"/>`);
+  return h;
+}
+
+/* Bäume, Wolken, Kleinkram */
+const FIR=(x,y,s)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-4" y="-10" width="8" height="12" fill="#8A5530"/><path d="M-22-8L0-44l22 36z" fill="#3E8F55"/><path d="M-17-30L0-60l17 30z" fill="#4BA463"/></g>`;
+const TREE=(x,y,s)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-4" y="-22" width="8" height="24" fill="#8A5530"/><circle cx="0" cy="-36" r="20" fill="#5DB877"/><circle cx="-7" cy="-42" r="7" fill="#7FCB8F" opacity=".7"/><circle cx="8" cy="-30" r="3" fill="#E0443A"/><circle cx="-9" cy="-28" r="3" fill="#E0443A"/></g>`;
+const BUSH=(x,y,s)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle cx="-10" cy="-8" r="10" fill="#4FA86A"/><circle cx="8" cy="-9" r="11" fill="#5DB877"/><circle cx="0" cy="-14" r="9" fill="#5DB877"/></g>`;
+const SHROOM=(x,y)=>`<g transform="translate(${x} ${y})"><rect x="-2" y="-7" width="4" height="7" fill="#FFF3DC"/><path d="M-7-6q7-9 14 0z" fill="#E0443A"/></g>`;
+const FLOWERS=(x,y)=>`<g transform="translate(${x} ${y})"><circle cx="0" cy="0" r="2.6" fill="#fff"/><circle cx="8" cy="3" r="2.6" fill="#FFB60F"/><circle cx="-6" cy="5" r="2.6" fill="#F48FB1"/></g>`;
+const CLOUD=(x,y,s,d)=>`<g class="cloud" style="animation-delay:${d}s"><g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="0" rx="30" ry="12" fill="#fff"/><circle cx="-10" cy="-8" r="13" fill="#fff"/><circle cx="10" cy="-10" r="15" fill="#fff"/></g></g>`;
+function LBL(x,y,text){const w=Math.round(text.length*8.2+22);return `<g class="lbl"><rect x="${x-w/2}" y="${y}" width="${w}" height="22" rx="11" fill="#fff" stroke="#1B2A4A" stroke-opacity=".18" stroke-width="2"/><text x="${x}" y="${y+16}" text-anchor="middle" font-family="Baloo 2,Trebuchet MS,sans-serif" font-weight="800" font-size="14" fill="#1B2A4A">${esc(text)}</text></g>`;}
+
+const PLACES={
+  kobold:{x:90,y:268,cx:142,cy:222,cs:.38},
+  fee:{x:300,y:243,cx:226,cy:196,cs:.38},
+  troll:{x:95,y:400,cx:150,cy:352,cs:.37},
+  drache:{x:312,y:398,cx:240,cy:352,cs:.38},
+  mine:{x:290,y:562}
+};
+function mapSVG(){
+  const can=canBuild();
+  let s=`<svg class="map" viewBox="0 0 400 600" role="group" aria-label="Landkarte vom Rechenland">
+  <defs><linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9DD3F2"/><stop offset="1" stop-color="#E3F3FB"/></linearGradient></defs>
+  <rect width="400" height="600" fill="url(#skyG)"/>
+  <circle cx="52" cy="54" r="38" fill="#FFE27A" opacity=".35"/><circle cx="52" cy="54" r="25" fill="#FFD45C"/>
+  ${CLOUD(120,70,1,-10)}${CLOUD(260,40,.8,-35)}${CLOUD(40,110,.7,-55)}
+  <path d="M0 190Q60 120 130 170 190 108 262 158 330 100 400 148V600H0z" fill="#B3DE98"/>
+  ${FIR(130,172,.45)}${FIR(150,176,.38)}${FIR(345,146,.45)}${FIR(368,150,.38)}
+  <path d="M0 232Q90 182 200 214 300 176 400 208V600H0z" fill="#9BD47F"/>
+  <path d="M0 280Q200 246 400 284V600H0z" fill="#86C46A"/>
+  <ellipse cx="105" cy="522" rx="96" ry="46" fill="#E8DDAA"/>
+  <ellipse cx="105" cy="522" rx="88" ry="40" fill="#5DB6E0"/>
+  <ellipse cx="90" cy="514" rx="58" ry="22" fill="#7CC8EA"/>
+  <path d="M60 512q10-5 20 0M110 530q10-5 20 0M140 508q8-4 16 0" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".8"/>
+  <g transform="translate(128 520)"><ellipse cx="0" cy="0" rx="9" ry="5" fill="#fff"/><circle cx="7" cy="-5" r="4" fill="#fff"/><path d="M10-5l4 1-4 1z" fill="#FF9F43"/></g>
+  <path d="M22 500v-16M27 502v-20M32 500v-14M185 540v-14M190 542v-18" stroke="#3E8F55" stroke-width="2.5" stroke-linecap="round"/>
+  <g fill="none" stroke-linecap="round">
+    <g stroke="#D9C185" stroke-width="20"><path d="M215 600C205 560 225 520 210 470 195 430 215 380 205 330 196 290 210 250 205 215"/><path d="M209 455C170 440 130 420 95 403"/><path d="M206 420C240 415 280 405 312 401"/><path d="M203 300C160 290 120 275 90 271"/><path d="M205 255C240 250 270 246 300 246"/><path d="M213 562C240 564 262 565 290 565"/></g>
+    <g stroke="#F1E2B2" stroke-width="15"><path d="M215 600C205 560 225 520 210 470 195 430 215 380 205 330 196 290 210 250 205 215"/><path d="M209 455C170 440 130 420 95 403"/><path d="M206 420C240 415 280 405 312 401"/><path d="M203 300C160 290 120 275 90 271"/><path d="M205 255C240 250 270 246 300 246"/><path d="M213 562C240 564 262 565 290 565"/></g>
+  </g>
+  ${FIR(26,330,.8)}${FIR(372,335,.75)}${TREE(370,480,.9)}${TREE(160,236,.6)}${FIR(22,236,.6)}${BUSH(176,598,.9)}${BUSH(385,598,.8)}${TREE(250,330,.55)}
+  ${SHROOM(150,330)}${SHROOM(160,334)}${SHROOM(345,430)}${FLOWERS(40,440)}${FLOWERS(250,470)}${FLOWERS(170,410)}${FLOWERS(360,270)}${FLOWERS(30,590)}
+  <ellipse cx="240" cy="450" rx="9" ry="6" fill="#A7B0BF"/><ellipse cx="180" cy="290" rx="7" ry="5" fill="#A7B0BF"/>`;
+  HOUSES.forEach(h=>{
+    const p=PLACES[h.id];
+    s+=`<g class="hs" data-go="${h.id}" role="button" tabindex="0" aria-label="Haus von ${h.who}, ${h.art}: ${h.topic}">
+      <g transform="translate(${p.x} ${p.y})"><g class="hb">${HOUSEART[h.id]}</g></g>
+      <g transform="translate(${p.cx} ${p.cy}) scale(${p.cs})"><g class="bob" style="animation-delay:${(p.x%7)/5}s">${CREATURES[h.id]}</g></g>
+      ${LBL(p.x,p.y+6,h.topic)}
+    </g>`;
+  });
+  const m=PLACES.mine;
+  s+=`<g class="hs" data-go="mine" role="button" tabindex="0" aria-label="${can?'Dein Bauplatz – du kannst weiterbauen':'Dein Bauplatz und dein Haus'}">
+    ${can?`<ellipse class="ring" cx="${m.x}" cy="${m.y+2}" rx="74" ry="16" fill="none" stroke="#FFB60F" stroke-width="4"/>`:''}
+    <g transform="translate(${m.x} ${m.y}) scale(.95)"><g class="hb">${myHouse(store.built)}</g></g>
+    ${can?`<g transform="translate(${m.x-82} ${m.y-70})"><g class="jump"><circle r="15" fill="#FFB60F" stroke="#fff" stroke-width="3"/><text y="7" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="800" font-size="20" fill="#fff">!</text></g></g>`:''}
+    ${LBL(m.x,m.y+6,store.name?`Haus von ${store.name}`:'Mein Haus')}
+  </g></svg>`;
+  return s;
+}
+
+/* Bauen */
+function nextStage(){return store.built<STAGES.length?STAGES[store.built]:null;}
+function missing(){const st=nextStage();if(!st)return [];return Object.entries(st.need).filter(([k,n])=>store.mat[k]<n).map(([k,n])=>[k,n-store.mat[k]]);}
+function canBuild(){return !!nextStage()&&missing().length===0;}
+
+
+/* ---------- Kurztext einer Aufgabe (für Lieblingsaufgaben) ---------- */
+function qText(t){
+  switch(t.mode){
+    case 'plus':return `${t.a} + ${t.b} = ?`;
+    case 'minus':return `${t.a} − ${t.b} = ?`;
+    case 'ergaenzen':return `${t.a} + ? = ${t.c}`;
+    case 'haus':case 'box':return `${t.n} = ${t.k} + ?`;
+    case 'zaehlen':return 'Wie viele?';
+    case 'vergleich':return `${t.a} ? ${t.b}`;
+    case 'nachbar':return t.vor?`? ${t.n}`:`${t.n} ?`;
+    case 'blitz':return t.kind==='wuerfel2'?'Zwei Würfel':t.kind==='wuerfel'?'Ein Würfel':'Rechenstreifen';
+    case 'reihe':return t.seq.map((v,i)=>i===t.gap?'?':v).join(', ');
+    case 'ordnung':return `Wo ist ${t.s.name}?`;
+    case 'immer':return `Immer ${t.T}`;
+    case 'drei':return `${t.a} + ${t.b} + ${t.c} = ?`;
+    case 'geschichte':return `${t.a} ${t.s.pl}, ${t.b} ${t.plus?'dazu':'weg'}`;
+    case 'familie':return famEq(t).parts.join(' ');
+    case 'muster':return t.rows[3].slice(0,4).join(' ')+' ?';
+    case 'sudoku':return 'Sudoku';
+  }
+}
+const modeOf=id=>MODES.find(m=>m.id===id);
+const isFav=t=>store.favs.some(f=>f.key===t.key);
+function toggleFav(t){
+  if(isFav(t))store.favs=store.favs.filter(f=>f.key!==t.key);
+  else{const c=Object.assign({},t);delete c.result;store.favs.unshift(c);store.favs=store.favs.slice(0,30);}
+  save();return isFav(t);
+}
+
+/* ---------- Materialleiste ---------- */
+function matbarHTML(){return MATKEYS.map(k=>`<div class="mat" data-m="${k}" aria-label="${matN(k,store.mat[k])}">${MATSVG[k]}<span>${store.mat[k]}</span></div>`).join('');}
+
+/* ---------- Landkarte ---------- */
+function hintFor(){
+  const st=nextStage(),total=MATKEYS.reduce((a,k)=>a+store.mat[k],0);
+  if(store.built===0&&total===0)return {who:'kobold',text:'Willkommen im Rechenland! Tippe auf ein Haus. Für jede richtige Aufgabe bekommst du ein Geschenk. Damit baust du dir dein eigenes Haus.'};
+  if(!st)return {who:'fee',text:`Dein Haus ist fertig${store.name?', '+store.name:''}! Darin kannst du deine Lieblingsaufgaben rechnen.`};
+  if(canBuild())return {who:'troll',text:`Du kannst jetzt ${st.akk} bauen! Tippe auf deinen Bauplatz.`};
+  const [k,n]=missing()[0],h=HOUSES.find(x=>x.mat===k);
+  return {who:h.id,text:`Für ${st.akk} brauchst du noch ${matN(k,n)}. Die bekommst du bei ${h.dat}.`};
+}
+function renderMap(){
+  $('#total').textContent=store.stars;
+  $('#matbar').innerHTML=matbarHTML();
+  const h=hintFor();
+  $('#tip').innerHTML=`<div class="av">${creature(h.who)}</div><p>${esc(h.text)}</p><button class="say" id="tipSay" aria-label="Vorlesen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></button>`;
+  $('#tipSay').hidden=!hasSpeech;
+  $('#tipSay').onclick=()=>speak(h.text,true);
+  $('#mapwrap').innerHTML=mapSVG();
+}
+function goMap(){if(G)clearTimeout(G.timer);G=null;try{speechSynthesis.cancel();}catch(e){}renderMap();show('map');}
+function go(dest){if(dest==='mine'){renderMine();show('mine');}else openHouse(dest);}
+$('#mapwrap').addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go);});
+$('#mapwrap').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const g=e.target.closest('[data-go]');if(g){e.preventDefault();go(g.dataset.go);}});
+
+/* ---------- Haus eines Fabelwesens ---------- */
+let curHouse='kobold';
+function openHouse(id){
+  curHouse=id;const h=H(id);
+  $('#hTitle').textContent=`Bei ${h.dat}`;
+  const sc=$('#scene');
+  sc.style.setProperty('--wall',h.wall);sc.style.setProperty('--floor',h.floor);sc.style.setProperty('--acc',h.acc);
+  sc.innerHTML=`<svg class="win" viewBox="0 0 60 60" aria-hidden="true"><rect x="3" y="3" width="54" height="54" rx="10" fill="#BFE3F7" stroke="${h.acc}" stroke-width="5"/><circle cx="42" cy="18" r="7" fill="#FFD45C"/><path d="M8 48q12-14 22-4 10-12 24 2v9H8z" fill="#86C46A"/><path d="M30 3v54M3 30h54" stroke="${h.acc}" stroke-width="3"/></svg>
+    <div class="rug"></div><div class="crtbig">${creature(h.id)}</div>
+    <div class="bubble"><button class="say" id="helloSay" aria-label="Vorlesen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></button>${esc(h.hello)}</div>`;
+  $('#helloSay').hidden=!hasSpeech;$('#helloSay').onclick=()=>speak(h.hello,true);
+  $('#giftline').innerHTML=`${MATSVG[h.mat]}<span>Geschenk für jede richtige Aufgabe: <b>${MATS[h.mat].ein}</b>. Du hast schon ${matN(h.mat,store.mat[h.mat])}.</span>`;
+  renderTiles();
+  show('house');speak(h.hello);
+}
+function renderTiles(){
+  const h=H(curHouse);
+  $('#r10').setAttribute('aria-pressed',store.range===10);
+  $('#r20').setAttribute('aria-pressed',store.range===20);
+  $('#tiles').innerHTML=h.ids.map(id=>{
+    const m=modeOf(id),best=store.best[m.id+'_'+store.range]||0;
+    const stars=[0,1,2].map(i=>i<best?STAR:STAR_OFF).join('');
+    return `<button class="tile" data-mode="${m.id}" style="--c:${m.c}"><span class="badge">${m.icon}</span><b>${m.name}</b><small>${m.desc}</small><span class="mini" aria-label="${best} von 3 Sternen">${stars}</span></button>`;
+  }).join('');
+}
+$('#tiles').addEventListener('click',e=>{const b=e.target.closest('.tile');if(b)start(b.dataset.mode,null,curHouse);});
+document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{store.range=+b.dataset.range;save();renderTiles();}));
+$('#hBack').addEventListener('click',goMap);
+
+/* ---------- Spiel ---------- */
+let G=null;
+function start(mode,list,houseId){
+  const R=store.range;
+  if(G)clearTimeout(G.timer);
+  const house=mode==='fav'?null:(houseId||houseOf(mode).id);
+  G={mode,R,house,tasks:list||makeTasks(mode,R,10),i:0,input:'',tries:0,locked:false,revealed:false,first:0,review:[],cells:null,timer:0,gifts:0};
+  if(mode==='fav'){$('#modeLabel').textContent='Meine Lieblingsaufgaben';}
+  else{const m=modeOf(mode);$('#modeLabel').textContent=mode==='sudoku'?m.name:`${m.name} · bis ${R}`;}
+  $('#hostav').innerHTML=house?creature(house):`<svg class="crt" viewBox="-80 -150 160 165" aria-hidden="true">${myHouse(store.built)}</svg>`;
+  $('#quit').setAttribute('aria-label',house?`Zurück zu ${H(house).who}`:'Zurück zu meinem Haus');
+  renderGiftc();
+  show('play');renderTask();
+}
+function renderGiftc(){
+  const c=$('#giftc');
+  c.hidden=!G.house;
+  if(G.house)c.innerHTML=`${MATSVG[H(G.house).mat]}<span>${G.gifts}</span>`;
+}
+function cur(){return G.tasks[G.i];}
+function renderTap(){
+  const g=$('#tapgrid');if(!g)return;
+  const names={e:'leer',r:'rotes Plättchen',b:'blaues Plättchen',x:'weggestrichen'};
+  g.innerHTML=G.cells.map((c,i)=>`<button class="tc ${c}" data-i="${i}" aria-label="${names[c]}"></button>`).join('');
+}
+const tapCount=()=>G.cells.filter(c=>c==='r'||c==='b').length;
+function flash(){
+  const v=$('#blitzVis');if(!v)return;
+  v.classList.remove('covered');clearTimeout(G.timer);
+  G.timer=setTimeout(()=>{if(G&&!G.locked&&!G.revealed)v.classList.add('covered');},G.R===20?2200:1600);
+}
+function renderFavBtn(){const on=isFav(cur());$('#favBtn').setAttribute('aria-pressed',on);$('#favBtn').setAttribute('aria-label',on?'Lieblingsaufgabe – antippen zum Entfernen':'Als Lieblingsaufgabe merken');}
+function renderTask(){
+  const t=cur();
+  clearTimeout(G.timer);
+  Object.assign(G,{input:'',tries:0,locked:false,revealed:false});
+  t.result=null;
+  $('#prompt').textContent=promptText(t);
+  $('#task').innerHTML=taskHTML(t);
+  if(t.mode==='immer'){G.cells=t.init.slice();renderTap();}
+  $('#help').innerHTML=helpHTML(t);
+  $('#help').hidden=true;$('#helpBtn').hidden=false;$('#helpBtn').textContent='Hilfe zeigen';
+  $('#fb').textContent='';$('#fb').className='fb';
+  const it=inputType(t);
+  $('#pad').hidden=it!=='num';$('#cpad').hidden=it!=='cmp';$('#tapOk').hidden=it!=='tap';$('#next').hidden=true;
+  $('#count').textContent=`Aufgabe ${G.i+1} von ${G.tasks.length}`;
+  $('#sayBtn').hidden=!hasSpeech;
+  renderDots();renderFavBtn();
+  if(t.mode==='blitz')flash();
+  speak(sayText(t));
+}
+function renderDots(){
+  $('#dots').innerHTML=G.tasks.map((t,j)=>`<span class="pdot ${j<G.i?t.result:j===G.i?'cur':''}"></span>`).join('');
+}
+function updateSlot(){const s=$('#slot');if(s)s.textContent=G.input||'?';}
+function showHelp(on){$('#help').hidden=!on;$('#helpBtn').textContent=on?'Hilfe ausblenden':'Hilfe zeigen';}
+function press(k){
+  if(!G||G.locked||G.revealed)return;
+  if(k==='del'){G.input=G.input.slice(0,-1);updateSlot();return;}
+  if(k==='ok'){if(G.input!=='')submit(parseInt(G.input,10));return;}
+  if(G.input.length>=2)return;
+  if(G.input==='0')G.input='';
+  G.input+=k;updateSlot();
+}
+function hidePads(){$('#pad').hidden=true;$('#cpad').hidden=true;$('#tapOk').hidden=true;}
+function bump(el){if(!el)return;el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump');}
+function flyGift(mat){
+  const from=$('#hostav').getBoundingClientRect(),to=$('#giftc').getBoundingClientRect();
+  const done=()=>{renderGiftc();bump($('#giftc'));tone([[988,.08],[1319,.14]]);};
+  if(reduced()||!from.width||!to.width||!Element.prototype.animate){done();return;}
+  const f=document.createElement('div');f.className='flygift';f.innerHTML=MATSVG[mat];document.body.appendChild(f);
+  const x0=from.left+from.width/2-20,y0=from.top+from.height/3-20,x1=to.left+to.width/2-20,y1=to.top+to.height/2-20;
+  const a=f.animate([
+    {transform:`translate(${x0}px,${y0}px) scale(.4)`,opacity:0},
+    {transform:`translate(${x0}px,${y0-40}px) scale(1.3)`,opacity:1,offset:.3},
+    {transform:`translate(${x1}px,${y1}px) scale(.7)`,opacity:1}
+  ],{duration:850,easing:'cubic-bezier(.5,0,.4,1)'});
+  a.onfinish=()=>{f.remove();done();};
+}
+function praiseFor(){
+  const list=G.house?H(G.house).praise:PRAISE;let p=pick(list);
+  if(store.name&&Math.random()<.35)p=p.replace(/!$/,'')+`, ${store.name}!`;
+  return p;
+}
+function submit(val){
+  if(!G||G.locked||G.revealed)return;
+  const t=cur(),slot=$('#slot'),fb=$('#fb');
+  if(val===t.ans){
+    G.locked=true;clearTimeout(G.timer);
+    if(slot){slot.textContent=val;slot.className='slot good pop';}
+    const bv=$('#blitzVis');if(bv)bv.classList.remove('covered');
+    const p=praiseFor();
+    fb.textContent=(t.mode==='geschichte'||t.mode==='blitz'&&t.kind==='wuerfel2')?`${p} ${solutionText(t)}`:p;
+    fb.className='fb good';
+    t.result=G.tries===0?'good':'help';
+    if(G.tries===0)G.first++;else G.review.push(t);
+    tone([[523,.14],[659,.14],[784,.22]]);speak(p);
+    if(G.house){const m=H(G.house).mat;store.mat[m]++;G.gifts++;save();setTimeout(()=>flyGift(m),250);}
+    renderDots();
+    setTimeout(next,t.mode==='geschichte'?1900:1500);
+    return;
+  }
+  G.tries++;
+  if(G.tries===1){
+    if(slot){slot.textContent=val;slot.className='slot shake';}
+    fb.textContent=t.mode==='immer'?`Du hast ${val} Plättchen. Es sollen genau ${t.T} sein.`:'Fast! Schau dir die Hilfe an und probier es noch einmal.';
+    fb.className='fb try';
+    showHelp(true);tone([[330,.2]]);speak(t.mode==='immer'?fb.textContent:'Fast! Probier es noch einmal.');
+    if(slot)setTimeout(()=>{if(G&&!G.locked&&!G.revealed){G.input='';slot.className='slot';updateSlot();}},700);
+  }else{
+    G.revealed=true;clearTimeout(G.timer);t.result='miss';G.review.push(t);
+    const bv=$('#blitzVis');if(bv)bv.classList.remove('covered');
+    if(t.mode==='immer'){
+      G.cells=t.init.slice();let d=t.T-t.s;
+      G.cells=G.cells.map(c=>{if(d>0&&c==='e'){d--;return 'b';}if(d<0&&c==='r'){d++;return 'x';}return c;});
+      renderTap();
+      fb.textContent=t.s<t.T?`Male ${t.T-t.s} dazu, dann sind es ${t.T}.`:`Streiche ${t.s-t.T} weg, dann sind es ${t.T}.`;
+    }else{
+      if(slot){slot.textContent=t.ans;slot.className='slot reveal pop';}
+      const words={'<':'kleiner als','>':'größer als','=':'gleich'};
+      fb.textContent=t.mode==='vergleich'?`${t.a} ist ${words[t.ans]} ${t.b}.`:`Die Lösung ist ${t.ans}. Schau sie dir genau an.`;
+    }
+    fb.className='fb reveal';
+    showHelp(true);hidePads();$('#next').hidden=false;
+    speak(fb.textContent);
+  }
+  renderDots();
+}
+function next(){
+  if(!G||$('#play').hidden)return;
+  G.i++;
+  if(G.i>=G.tasks.length)finish();else renderTask();
+}
+function finish(){
+  clearTimeout(G.timer);
+  const n=G.tasks.length,fav=G.mode==='fav';
+  let earned=0;
+  if(!fav){
+    const ratio=G.first/n;earned=ratio>=.9?3:ratio>=.6?2:1;
+    store.stars+=earned;
+    const key=G.mode+'_'+G.R;
+    if(n===10)store.best[key]=Math.max(store.best[key]||0,earned);
+    save();
+  }
+  const h=G.house?H(G.house):null;
+  $('#doneAv').innerHTML=h?creature(h.id):`<svg class="crt" viewBox="-80 -150 160 165" aria-hidden="true">${myHouse(store.built)}</svg>`;
+  const say=h?(G.gifts?`Danke fürs Rechnen! Ich schenke dir ${matN(h.mat,G.gifts)}.`:'Danke fürs Rechnen! Beim nächsten Mal klappt es bestimmt.'):'Toll gerechnet in deinem Haus!';
+  $('#doneSay').textContent=say;
+  $('#gifts').innerHTML=h?fill(G.gifts,'').map((_,i)=>`<span style="animation-delay:${.25+i*.08}s">${MATSVG[h.mat]}</span>`).join(''):'';
+  $('#gifts').hidden=!h||!G.gifts;
+  $('#bigstars').hidden=fav;
+  $('#bigstars').innerHTML=[0,1,2].map(i=>i<earned?STAR:STAR_OFF).join('');
+  $('#doneTitle').textContent=fav?'Geschafft!':earned===3?'Super gemacht!':earned===2?'Gut gemacht!':'Geschafft!';
+  $('#doneText').textContent=fav?`Du hast ${G.first} von ${n} sofort richtig gelöst.`:`Du hast ${G.first} von ${n} Aufgaben sofort richtig gelöst. Dafür bekommst du ${earned} ${earned===1?'Stern':'Sterne'}.`;
+  $('#favlist').hidden=fav;
+  if(!fav)renderFavPick();
+  const rv=G.review;
+  $('#review').hidden=rv.length===0;$('#practice').hidden=rv.length===0;
+  $('#reviewList').innerHTML=rv.map(t=>`<li>${solutionText(t)}</li>`).join('');
+  $('#toBuild').hidden=!canBuild();
+  $('#toHouse').textContent=h?`Zurück zu ${h.who}`:'Zu meinem Haus';
+  $('#again').textContent=fav?'Nochmal rechnen':'Neue Runde';
+  show('done');
+  tone([[523,.15],[659,.15],[784,.15],[1047,.35]]);
+  speak(say+' '+$('#doneTitle').textContent);
+}
+function renderFavPick(){
+  $('#favPick').innerHTML=G.tasks.map((t,i)=>`<li><button data-fi="${i}" aria-pressed="${isFav(t)}"><span>${esc(qText(t))}</span>${HEART}</button></li>`).join('');
+}
+$('#favPick').addEventListener('click',e=>{const b=e.target.closest('[data-fi]');if(!b||!G)return;const on=toggleFav(G.tasks[+b.dataset.fi]);b.setAttribute('aria-pressed',on);if(on)tone([[784,.1],[1047,.14]]);});
+$('#favBtn').addEventListener('click',()=>{if(!G)return;const on=toggleFav(cur());renderFavBtn();const b=$('#favBtn');b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');if(on){tone([[784,.1],[1047,.14]]);speak('Gemerkt! Die Aufgabe kommt in dein Haus.',false);}});
+
+$('#pad').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(b)press(b.dataset.k);});
+$('#cpad').addEventListener('click',e=>{const b=e.target.closest('[data-s]');if(b)submit(b.dataset.s);});
+$('#tapOk').addEventListener('click',()=>{if(G)submit(tapCount());});
+$('#task').addEventListener('click',e=>{
+  if(!G)return;
+  if(e.target.closest('#reshow')){flash();return;}
+  const tc=e.target.closest('.tc');
+  if(tc&&!G.locked&&!G.revealed){
+    const i=+tc.dataset.i,m={e:'b',b:'e',r:'x',x:'r'};
+    G.cells[i]=m[G.cells[i]];renderTap();tone([[880,.05]]);
+  }
+});
+$('#helpBtn').addEventListener('click',()=>showHelp($('#help').hidden));
+$('#sayBtn').addEventListener('click',()=>speak(sayText(cur()),true));
+$('#next').addEventListener('click',next);
+function leave(){
+  try{speechSynthesis.cancel();}catch(e){}
+  const house=G&&G.house;if(G)clearTimeout(G.timer);G=null;
+  if(house)openHouse(house);else{renderMine();show('mine');}
+}
+$('#quit').addEventListener('click',leave);
+$('#again').addEventListener('click',()=>{if(G.mode==='fav')start('fav',G.tasks.map(t=>Object.assign({},t,{result:null})));else start(G.mode,null,G.house);});
+$('#practice').addEventListener('click',()=>start(G.mode,G.review.map(t=>Object.assign({},t,{result:null})),G.house));
+$('#toHouse').addEventListener('click',leave);
+$('#toMap').addEventListener('click',goMap);
+$('#toBuild').addEventListener('click',()=>{G=null;renderMine();show('mine');});
+document.addEventListener('keydown',e=>{
+  if($('#play').hidden||!G)return;
+  const t=cur(),it=inputType(t);
+  if(e.key==='Enter'){if(!$('#next').hidden)next();else if(it==='tap')submit(tapCount());else press('ok');return;}
+  if(it==='num'){
+    if(/^[0-9]$/.test(e.key))press(e.key);
+    else if(e.key==='Backspace')press('del');
+  }else if(it==='cmp'&&['<','>','='].includes(e.key))submit(e.key);
+});
+
+/* ---------- Mein Haus ---------- */
+function renderMine(grow){
+  const b=store.built,st=nextStage();
+  $('#mTitle').textContent=store.name?`Haus von ${store.name}`:'Mein Haus';
+  $('#myscene').innerHTML=`<svg viewBox="-110 -160 220 180" role="img" aria-label="Dein Haus: ${b} von ${STAGES.length} Bauschritten fertig">
+    <rect x="-110" y="-160" width="220" height="180" fill="#BFE3F7"/><circle cx="-80" cy="-128" r="14" fill="#FFD45C"/>
+    ${CLOUD(40,-128,.6,-20)}
+    <path d="M-110-20q60-30 110-10t110-6V20h-220z" fill="#9BD47F"/><rect x="-110" y="0" width="220" height="20" fill="#86C46A"/>
+    ${TREE(-92,4,.7)}${FIR(96,6,.65)}
+    <g>${myHouse(b,grow)}</g></svg>`;
+  $('#steps').innerHTML=STAGES.map((s,i)=>`<i class="${i<b?'on':i===b?'next':''}"></i>`).join('');
+  $('#matbar2').innerHTML=matbarHTML();
+  const bd=$('#build');
+  if(!st){
+    bd.innerHTML=`<h3>Dein Haus ist fertig!</h3><p class="sub">Alle ${STAGES.length} Bauschritte geschafft. Sammle weiter Geschenke und Sterne bei den Fabelwesen.</p>`;
+  }else{
+    const can=canBuild(),miss=missing();
+    const needs=Object.entries(st.need).map(([k,n])=>`<span class="need ${store.mat[k]>=n?'ok':''}" aria-label="${matN(k,Math.min(store.mat[k],n))} von ${n}">${MATSVG[k]}${Math.min(store.mat[k],n)} / ${n}</span>`).join('');
+    let more='';
+    if(!can){const [k,n]=miss[0],h=HOUSES.find(x=>x.mat===k);more=`<p class="sub">Dir fehlen noch ${matN(k,n)}. Die bekommst du bei ${h.dat}.</p><button class="big alt" id="goGet" data-h="${h.id}">Zu ${h.who} gehen</button>`;}
+    bd.innerHTML=`<p class="sub">Bauschritt ${b+1} von ${STAGES.length}</p><h3>${st.name}</h3><div class="needs">${needs}</div>
+      <button class="big go" id="buildBtn" ${can?'':'disabled'}>${can?st.akk.replace(/^\w/,c=>c.toUpperCase())+' bauen!':'Noch nicht genug'}</button>${more}`;
+    $('#buildBtn').onclick=buildNext;
+    const gg=$('#goGet');if(gg)gg.onclick=()=>openHouse(gg.dataset.h);
+  }
+  renderFavs();
+}
+function buildNext(){
+  if(!canBuild())return;
+  const st=nextStage();
+  Object.entries(st.need).forEach(([k,n])=>store.mat[k]-=n);
+  store.built++;save();
+  renderMine(store.built-1);
+  confetti();
+  tone([[523,.12],[659,.12],[784,.12],[1047,.18],[1319,.3]]);
+  speak(`Hurra! Du hast ${st.akk} gebaut!`,false);
+}
+function renderFavs(){
+  const box=$('#favs'),n=store.favs.length;
+  if(store.built<DOOR){
+    box.innerHTML=`<div class="locked"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="12" rx="3" fill="#FFB60F"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="#5A6A8A" stroke-width="2.4" fill="none"/></svg><p>Sobald dein Haus eine Tür hat, kannst du hinein. Dort rechnest du deine Lieblingsaufgaben. ${n?`Du hast schon ${n} gesammelt.`:'Tippe beim Rechnen auf das Herz, um eine Aufgabe zu sammeln.'}</p></div>`;
+    return;
+  }
+  if(!n){
+    box.innerHTML=`<h3>Meine Lieblingsaufgaben</h3><p class="sub">Noch leer. Tippe beim Rechnen auf das Herz, dann landet die Aufgabe hier.</p>`;
+    return;
+  }
+  box.innerHTML=`<h3>Meine Lieblingsaufgaben</h3><p class="sub">${n} gesammelt. Tippe auf eine Karte, um sie zu rechnen.</p>
+    <button class="big go" id="favAll">${n>10?'10 davon rechnen':'Alle rechnen'}</button>
+    <div class="favgrid">${store.favs.map((t,i)=>{const m=modeOf(t.mode);return `<div class="fwrap"><button class="fcard" data-play="${i}"><b>${esc(qText(t))}</b><small>${m?m.name:''}</small></button><button class="fdel" data-del="${i}" aria-label="Aus Lieblingsaufgaben entfernen">✕</button></div>`;}).join('')}</div>`;
+  $('#favAll').onclick=()=>start('fav',shuffle(store.favs).slice(0,10).map(t=>Object.assign({},t)));
+}
+$('#favs').addEventListener('click',e=>{
+  const p=e.target.closest('[data-play]'),d=e.target.closest('[data-del]');
+  if(d){store.favs.splice(+d.dataset.del,1);save();renderFavs();return;}
+  if(p){const t=store.favs[+p.dataset.play];if(t)start('fav',[Object.assign({},t)]);}
+});
+$('#mBack').addEventListener('click',goMap);
+function confetti(){
+  if(reduced()||!Element.prototype.animate)return;
+  const cols=['#FFB60F','#E0443A','#2D6CD8','#16935B','#C96D9B'];
+  for(let i=0;i<28;i++){
+    const c=document.createElement('div');c.className='conf';
+    c.innerHTML=`<svg viewBox="0 0 24 24" style="width:100%;height:100%;fill:${cols[i%cols.length]}"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>`;
+    document.body.appendChild(c);
+    const x=innerWidth/2,y=innerHeight*.35,ang=Math.random()*Math.PI*2,dist=90+Math.random()*170;
+    const a=c.animate([{transform:`translate(${x}px,${y}px) scale(.3)`,opacity:1},{transform:`translate(${x+Math.cos(ang)*dist}px,${y+Math.sin(ang)*dist+120}px) rotate(${rand(-200,200)}deg) scale(1)`,opacity:0}],{duration:1300+Math.random()*500,easing:'cubic-bezier(.2,.7,.4,1)'});
+    a.onfinish=()=>c.remove();
+  }
+}
+
+/* ---------- Einstellungen ---------- */
+function renderSettings(){
+  $('#nameIn').value=store.name||'';
+  $('#togSpeak').setAttribute('aria-pressed',!!store.speak);
+  $('#togSound').setAttribute('aria-pressed',!!store.sound);
+  $('#togSpeak').hidden=!hasSpeech;
+  $('#reset').dataset.arm='';$('#reset').textContent='Alles zurücksetzen';
+}
+$('#openSet').addEventListener('click',()=>{renderSettings();show('settings');});
+$('#sBack').addEventListener('click',goMap);
+$('#nameIn').addEventListener('input',e=>{store.name=e.target.value.trim().slice(0,16);save();});
+$('#togSpeak').addEventListener('click',()=>{store.speak=!store.speak;save();renderSettings();if(store.speak)speak('Ich lese dir alles vor.');});
+$('#togSound').addEventListener('click',()=>{store.sound=!store.sound;save();renderSettings();tone([[660,.15]]);});
+$('#reset').addEventListener('click',e=>{
+  const b=e.currentTarget;
+  if(b.dataset.arm!=='1'){b.dataset.arm='1';b.textContent='Wirklich alles löschen? Nochmal tippen';return;}
+  store=DEF();save();goMap();
+});
+
+renderMap();
+
+})();
+</script>
+</body>
+</html>
