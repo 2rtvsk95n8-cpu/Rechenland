@@ -401,6 +401,75 @@ svg.map{display:block;width:100%;height:auto}
 .qv .mrooms span+span{border-left:2px solid var(--ink)}
 .fcard .qv{flex:none}
 
+/* Zähler auf den Kacheln */
+.tile .mini{display:flex;align-items:center;justify-content:space-between;width:100%;gap:6px}
+.tile .cnt{font-family:var(--font-display);font-weight:800;font-size:15px;color:var(--good);padding-right:2px}
+
+/* Vorlese-Knöpfe */
+.tile,.big,.danger,.seg button,.cpad .key,.key.ok,.frame{position:relative}
+.sp{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--bg);border:2px solid var(--line);vertical-align:middle;flex:none;cursor:pointer;line-height:0}
+.sp svg{width:16px;height:16px;fill:var(--ink)}
+.sp:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.sp.inl{margin-left:8px}
+.label .sp{width:26px;height:26px}
+.sp.abs{position:absolute;top:8px;right:8px}
+.big,.danger{min-height:64px;height:auto;padding:8px 48px;line-height:1.15}
+.big .sp.abs,.danger .sp.abs{top:50%;transform:translateY(-50%);right:10px;background:rgba(255,255,255,.92);border-color:rgba(255,255,255,.6)}
+.seg button .sp.abs{width:26px;height:26px;top:50%;transform:translateY(-50%);right:6px}
+.cpad .key .sp.abs,.key.ok .sp.abs{width:24px;height:24px;top:4px;right:4px}
+.cpad .key .sp svg,.key.ok .sp svg{width:13px;height:13px}
+.frame .sp.abs{top:auto;bottom:6px;right:6px}
+.tile{padding-right:44px}
+.helpbtn{display:inline-flex;align-items:center}
+.favlist li button .sp{margin-left:4px}
+.tog>span:first-child{display:inline-flex;align-items:center}
+
+/* Tor als Eingang */
+#myscene .gate,#myscene .gatehint{cursor:pointer}
+
+/* Der Saal */
+#hall.enter .hallroom{animation:doorIn .55s cubic-bezier(.2,.9,.3,1.1) both}
+@keyframes doorIn{from{transform:scale(.55);opacity:0;border-radius:200px 200px 22px 22px}}
+.hallroom{position:relative;border-radius:22px;overflow:hidden;border:4px solid #6E6658;padding:18px 50px 54px;
+  background:#B8B0A3 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='30'%3E%3Cpath d='M0 1h60M0 16h60M30 1v15M1 16v15M59 16v15' stroke='%239C9488' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  display:flex;flex-direction:column;gap:8px}
+.banner{position:absolute;top:0;width:34px;height:72px}
+.banner.bl{left:8px}.banner.br{right:8px}
+.torch{position:absolute;top:150px;width:30px;height:70px}
+.torch.tl{left:10px}.torch.tr{right:10px}
+.flame{animation:flick 1.1s ease-in-out infinite;transform-box:fill-box;transform-origin:center bottom}
+.torch.tr .flame{animation-delay:.4s}
+@keyframes flick{50%{transform:scaleY(.82) scaleX(1.06)}}
+.hall-say{margin:0}
+.hall-say::before{display:none}
+.hall-say p{margin:0}
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:40px 18px;margin-top:34px}
+.fr{position:relative;min-width:0}
+.fr::before{content:"";position:absolute;top:-30px;left:calc(50% - 24px);width:48px;height:24px;
+  background:linear-gradient(to top left,transparent calc(50% - 1.5px),#5A3B22 calc(50% - 1.5px),#5A3B22 calc(50% + 1.5px),transparent calc(50% + 1.5px)) left/50% 100% no-repeat,
+             linear-gradient(to top right,transparent calc(50% - 1.5px),#5A3B22 calc(50% - 1.5px),#5A3B22 calc(50% + 1.5px),transparent calc(50% + 1.5px)) right/50% 100% no-repeat}
+.fr::after{content:"";position:absolute;top:-34px;left:calc(50% - 5px);width:10px;height:10px;border-radius:50%;background:#5A6A8A;box-shadow:0 1px 0 #2C3550}
+.frame{width:100%;display:flex;flex-direction:column;align-items:center;gap:6px;background:#FFFBEF;border:9px solid #C9A24B;border-radius:6px;box-shadow:inset 0 0 0 2px #E8C873,0 6px 0 rgba(40,30,10,.28);padding:12px 12px 10px;transform:rotate(-1.4deg);text-align:center;min-height:96px;justify-content:center}
+.fr:nth-child(even) .frame{transform:rotate(1.4deg)}
+.frame .qv{justify-content:center;flex:none}
+.frame small{color:var(--muted);font-size:14px;font-weight:700}
+.frame.empty{background:rgba(255,255,255,.35);border-style:dashed;border-color:#E8D9A8;box-shadow:none;color:#4A4238;font-weight:700;font-size:15px}
+.fr .fdel{top:-12px;right:-10px;z-index:1}
+.carpet{position:absolute;left:0;right:0;bottom:0;height:34px;background:linear-gradient(#8A3B2E,#B5302A);border-top:4px solid #C9A24B}
+@media (max-width:380px){.hallroom{padding-left:42px;padding-right:42px}.banner,.torch{transform:scale(.85)}}
+.big.alt .sp.abs,.danger .sp.abs{background:var(--bg);border-color:var(--line)}
+
+/* kleine Figur neben dem Namen eines Fabelwesens */
+.wf{display:inline-block;width:1.25em;height:1.35em;vertical-align:-.32em;margin:0 .15em 0 .05em}
+.wf svg{display:block;width:100%;height:100%}
+.build .sub .wf{width:1.6em;height:1.7em;vertical-align:-.55em}
+.wn{white-space:nowrap}
+
+/* Stimmen-Probe in den Einstellungen */
+.vtest{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vt{position:relative;display:flex;align-items:center;gap:6px;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:8px 40px 8px 10px;font-family:var(--font-display);font-weight:800;font-size:19px;box-shadow:0 3px 0 var(--line)}
+.vt .wf{width:34px;height:36px;vertical-align:0;margin:0}
+
 .legal{text-align:center;font-size:15px;color:var(--muted)}
 .legal a{color:var(--muted);font-weight:700;text-underline-offset:3px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -474,9 +543,9 @@ svg.map{display:block;width:100%;height:auto}
       <button class="key del" data-k="del" aria-label="Löschen">⌫</button><button class="key" data-k="0">0</button><button class="key ok" data-k="ok">Fertig</button>
     </div>
     <div class="cpad" id="cpad" hidden>
-      <button class="key" data-s="<">&lt;<small>kleiner</small></button>
-      <button class="key" data-s="=">=<small>gleich</small></button>
-      <button class="key" data-s=">">&gt;<small>größer</small></button>
+      <button class="key" data-s="<" data-say="kleiner">&lt;<small>kleiner</small></button>
+      <button class="key" data-s="=" data-say="gleich">=<small>gleich</small></button>
+      <button class="key" data-s=">" data-say="größer">&gt;<small>größer</small></button>
     </div>
     <button class="big go" id="tapOk" hidden>Fertig</button>
     <button class="big" id="next" hidden>Weiter</button>
@@ -491,7 +560,7 @@ svg.map{display:block;width:100%;height:auto}
       <h2 id="doneTitle">Geschafft!</h2>
       <p id="doneText"></p>
       <div class="favlist" id="favlist">
-        <b>Welche Aufgaben magst du? Tippe aufs Herz, dann kommen sie in dein Haus.</b>
+        <b>Welche Aufgaben magst du? Tippe aufs Herz, dann kommen sie in dein Schloss.</b>
         <ul id="favPick"></ul>
       </div>
       <div class="review" id="review" hidden>
@@ -500,7 +569,7 @@ svg.map{display:block;width:100%;height:auto}
       </div>
     </div>
     <div class="btns">
-      <button class="big go" id="toBuild" hidden>Jetzt an meinem Haus bauen</button>
+      <button class="big go" id="toBuild" hidden>Jetzt an meinem Schloss bauen</button>
       <button class="big" id="again">Neue Runde</button>
       <button class="big alt" id="practice" hidden>Nur diese Aufgaben üben</button>
       <button class="big alt" id="toHouse"></button>
@@ -508,17 +577,35 @@ svg.map{display:block;width:100%;height:auto}
     </div>
   </section>
 
-  <!-- Mein Haus -->
+  <!-- Mein Schloss -->
   <section id="mine" class="view" hidden>
     <div class="hhead">
       <button class="x" id="mBack" aria-label="Zurück zum Rechenland">←</button>
-      <h2 id="mTitle">Mein Haus</h2>
+      <h2 id="mTitle">Mein Schloss</h2>
     </div>
     <div class="myscene" id="myscene"></div>
     <div class="steps" id="steps" aria-hidden="true"></div>
     <div class="matbar" id="matbar2"></div>
     <div class="build" id="build"></div>
     <div class="build" id="favs"></div>
+  </section>
+
+  <!-- Saal im Schloss -->
+  <section id="hall" class="view" hidden>
+    <div class="hhead">
+      <button class="x" id="hlBack" aria-label="Zurück vor das Schloss">←</button>
+      <h2 id="hlTitle">Im Schloss</h2>
+    </div>
+    <div class="hallroom">
+      <svg class="banner bl" viewBox="0 0 40 84" aria-hidden="true"><path d="M0 2h40" stroke="#6B4A2E" stroke-width="4"/><path d="M4 4h32v62l-16 14-16-14z" fill="#2D6CD8"/><path d="M20 22l3.5 7 7.7 1-5.6 5.4 1.3 7.6-6.9-3.6-6.9 3.6 1.3-7.6L8.8 30l7.7-1z" fill="#FFB60F"/></svg>
+      <svg class="banner br" viewBox="0 0 40 84" aria-hidden="true"><path d="M0 2h40" stroke="#6B4A2E" stroke-width="4"/><path d="M4 4h32v62l-16 14-16-14z" fill="#E0443A"/><path d="M20 22l3.5 7 7.7 1-5.6 5.4 1.3 7.6-6.9-3.6-6.9 3.6 1.3-7.6L8.8 30l7.7-1z" fill="#FFB60F"/></svg>
+      <svg class="torch tl" viewBox="0 0 30 70" aria-hidden="true"><circle cx="15" cy="16" r="14" fill="#FFD45C" opacity=".35"/><path class="flame" d="M15 2q8 10 6 18-2 6-6 6t-6-6q-2-8 6-18z" fill="#FF9F43"/><path class="flame" d="M15 10q4 6 3 10-1 3-3 3t-3-3q-1-4 3-10z" fill="#FFE27A"/><path d="M8 26h14l-3 10h-8z" fill="#8A5530"/><rect x="13" y="36" width="4" height="30" fill="#5A3B22"/></svg>
+      <svg class="torch tr" viewBox="0 0 30 70" aria-hidden="true"><circle cx="15" cy="16" r="14" fill="#FFD45C" opacity=".35"/><path class="flame" d="M15 2q8 10 6 18-2 6-6 6t-6-6q-2-8 6-18z" fill="#FF9F43"/><path class="flame" d="M15 10q4 6 3 10-1 3-3 3t-3-3q-1-4 3-10z" fill="#FFE27A"/><path d="M8 26h14l-3 10h-8z" fill="#8A5530"/><rect x="13" y="36" width="4" height="30" fill="#5A3B22"/></svg>
+      <div class="hall-say bubble"><p id="hallSay"></p></div>
+      <div class="wall" id="wall"></div>
+      <div class="carpet" aria-hidden="true"></div>
+    </div>
+    <button class="big go" id="hallAll">Alle Bilder rechnen</button>
   </section>
 
   <!-- Einstellungen -->
@@ -528,13 +615,17 @@ svg.map{display:block;width:100%;height:auto}
       <h2>Einstellungen</h2>
     </div>
     <label class="field2" for="nameIn"><span class="label">Wie heißt du?</span><input id="nameIn" type="text" maxlength="16" autocomplete="off" placeholder="Dein Name"></label>
+    <div class="field2"><span class="label">Stimmen anhören</span><div class="vtest" id="voiceTest"></div></div>
     <div class="toggles">
       <button class="tog" id="togSpeak" aria-pressed="false"><span>Vorlesen</span><span class="sw"></span></button>
       <button class="tog" id="togSound" aria-pressed="true"><span>Töne</span><span class="sw"></span></button>
+      <button class="tog" id="togHelp" aria-pressed="false"><span>Hilfen</span><span class="sw"></span></button>
     </div>
     <div class="note">
       <p><b>Für Eltern:</b> Im Rechenland wohnen vier Fabelwesen. Knopf der Kobold übt Zahlen, Funkel der Drache das Zerlegen, Brummbart der Troll Plus und Minus, Lumi die Fee Sudoku und die Bunte Mischung. Die Themen folgen dem Matheheft der 1. Klasse.</p>
-      <p>Für jede richtig gelöste Aufgabe gibt es ein Geschenk: Holz, Ziegel, Steine oder Kristalle. Damit baut Ihr Kind in 8 Schritten ein eigenes Haus. Ab der Tür kann es hinein und dort seine Lieblingsaufgaben sammeln und nachrechnen. Nichts wird bei Fehlern abgezogen, und es gibt keinen Zeitdruck.</p>
+      <p>Für jede richtig gelöste Aufgabe gibt es ein Geschenk: Holz, Ziegel, Steine oder Kristalle. Geschenke gibt es nur für Aufgaben, die Ihr Kind zum ersten Mal löst. Das Spiel stellt deshalb bevorzugt neue Aufgaben. Damit baut Ihr Kind in 12 Schritten ein eigenes Schloss, dafür braucht es vor allem viele Steine. Insgesamt sind 128 neue Aufgaben nötig. Allein im Zahlenraum bis 10 gibt es für jedes Material weit mehr verschiedene Aufgaben, sodass das Schloss mit deutlich weniger als 80 % der Aufgaben fertig wird. Ab dem Tor kann Ihr Kind hinein: Ein Tipp auf das Tor öffnet den Saal, in dem die Lieblingsaufgaben als Bilder an der Wand hängen. Nichts wird bei Fehlern abgezogen, und es gibt keinen Zeitdruck.</p>
+      <p>Bei einem Fehler darf Ihr Kind noch einmal probieren. Nach dem zweiten Fehler erscheint unter der Aufgabe automatisch eine Hilfe (Plättchen, Zahlenstrahl oder Tipp), nach dem dritten die Lösung. Bei der nächsten Aufgabe ist die Hilfe wieder ausgeblendet. Mit dem Schalter „Hilfen“ bekommt Ihr Kind zusätzlich den Knopf „Hilfe zeigen“, um die Hilfe schon vorher selbst zu öffnen.</p>
+      <p>Hinter jedem Text und jedem Knopf steht ein Lautsprecher. Ein Tipp darauf liest den Text vor. Jedes Fabelwesen spricht mit eigener Stimmlage, unter „Stimmen anhören“ können Sie sie ausprobieren. Die Grundstimme kommt vom Gerät.</p>
       <p>Der Fortschritt wird nur in diesem Browser auf diesem Gerät gespeichert.</p>
     </div>
     <button class="danger" id="reset">Alles zurücksetzen</button>
@@ -607,9 +698,9 @@ const PIPS={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
 /* ---------- Speicher ---------- */
 const KEY='rechenland-v1';
 const MATKEYS=['holz','ziegel','stein','kristall'];
-const DEF=()=>({stars:0,best:{},range:10,speak:false,sound:true,name:'',mat:{holz:0,ziegel:0,stein:0,kristall:0},built:0,favs:[]});
+const DEF=()=>({stars:0,best:{},range:10,speak:false,sound:true,name:'',mat:{holz:0,ziegel:0,stein:0,kristall:0},built:0,favs:[],help:false,helpV:2,solved:{},solvedN:{}});
 let store=DEF();
-try{const s=JSON.parse(localStorage.getItem(KEY));if(s){store=Object.assign(DEF(),s);store.mat=Object.assign(DEF().mat,s.mat||{});if(!Array.isArray(store.favs))store.favs=[];}}catch(e){}
+try{const s=JSON.parse(localStorage.getItem(KEY));if(s){store=Object.assign(DEF(),s);store.mat=Object.assign(DEF().mat,s.mat||{});if(!Array.isArray(store.favs))store.favs=[];if(!store.solved||typeof store.solved!=='object')store.solved={};if(!store.solvedN||typeof store.solvedN!=='object')store.solvedN={};if(s.helpV!==2){store.help=false;store.helpV=2;save();}}}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}}
 
 /* ---------- Helfer ---------- */
@@ -619,7 +710,7 @@ const pick=a=>a[Math.floor(Math.random()*a.length)];
 const fill=(n,t)=>Array(Math.max(0,n)).fill(t);
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const VIEWS=['map','house','play','done','mine','settings'];
+const VIEWS=['map','house','play','done','mine','hall','settings'];
 function show(id){VIEWS.forEach(s=>$('#'+s).hidden=(s!==id));window.scrollTo(0,0);}
 const reduced=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){return false;}};
 
@@ -643,7 +734,7 @@ function speak(text,force){
   if(!hasSpeech||(!store.speak&&!force))return;
   try{
     const s=window.speechSynthesis;s.cancel();
-    const u=new SpeechSynthesisUtterance(text);u.lang='de-DE';u.rate=.9;
+    const u=new SpeechSynthesisUtterance(text);u.lang='de-DE';const vp=voiceProfile();u.rate=vp.rate;u.pitch=vp.pitch;
     const v=s.getVoices().find(v=>v.lang&&v.lang.toLowerCase().startsWith('de'));if(v)u.voice=v;
     s.speak(u);
   }catch(e){}
@@ -988,16 +1079,20 @@ const houseOf=mode=>HOUSES.find(h=>h.ids.includes(mode));
 const H=id=>HOUSES.find(h=>h.id===id);
 
 const STAGES=[
-  {name:'Fundament',akk:'das Fundament',need:{stein:6}},
-  {name:'Wände',akk:'die Wände',need:{holz:8}},
-  {name:'Dach',akk:'das Dach',need:{ziegel:8}},
-  {name:'Tür',akk:'die Tür',need:{holz:5}},
+  {name:'Fundament',akk:'das Fundament',need:{stein:8}},
+  {name:'Mauern',akk:'die Mauern',need:{stein:12}},
+  {name:'Tor',akk:'das Tor',need:{holz:6}},
+  {name:'Linker Turm',akk:'den linken Turm',need:{stein:10}},
+  {name:'Rechter Turm',akk:'den rechten Turm',need:{stein:10}},
+  {name:'Zinnen',akk:'die Zinnen',need:{stein:8}},
+  {name:'Turmdächer',akk:'die Turmdächer',need:{ziegel:10}},
   {name:'Fenster',akk:'die Fenster',need:{kristall:6}},
-  {name:'Schornstein',akk:'den Schornstein',need:{ziegel:4,stein:4}},
-  {name:'Garten',akk:'den Garten',need:{holz:4,stein:4}},
-  {name:'Fahne und Lichter',akk:'die Fahne und die Lichter',need:{kristall:6,ziegel:4}}
+  {name:'Bergfried',akk:'den Bergfried',need:{stein:12,ziegel:4}},
+  {name:'Wassergraben und Zugbrücke',akk:'den Wassergraben und die Zugbrücke',need:{holz:8,stein:6}},
+  {name:'Fahnen',akk:'die Fahnen',need:{holz:4,kristall:4}},
+  {name:'Lichter und Blumen',akk:'die Lichter und Blumen',need:{kristall:6,ziegel:4}}
 ];
-const DOOR=4; /* ab 4 gebauten Schritten hat das Haus eine Tür */
+const DOOR=3; /* ab 3 gebauten Schritten hat das Schloss ein Tor */
 
 /* Augen mit Blinzeln */
 const EYE=(x,y,r,p)=>`<g class="eye"><circle cx="${x}" cy="${y}" r="${r}" fill="#fff"/><circle cx="${x+1}" cy="${y+1.5}" r="${p}" fill="#1B2A4A"/><circle cx="${x+2.5}" cy="${y-.5}" r="${p*.35}" fill="#fff"/></g>`;
@@ -1066,24 +1161,39 @@ const HOUSEART={
     <path class="tw" d="M-50-140l2 5 5 1-5 2-2 5-2-5-5-2 5-1z" fill="#FFE27A"/><path class="tw" d="M54-80l2 5 5 1-5 2-2 5-2-5-5-2 5-1z" fill="#FFE27A" style="animation-delay:1s"/>`
 };
 
-/* Das eigene Haus, Schritt für Schritt */
+/* Das eigene Schloss, Schritt für Schritt */
+function bricks(x0,x1,y0,y1){
+  let p='',r=0;
+  for(let y=y1-10;y>y0;y-=10,r++){p+=`M${x0} ${y}H${x1}`;for(let x=x0+(r%2?13:6);x<x1-2;x+=14)p+=`M${x} ${y}v10`;}
+  return `<path d="${p}" stroke="#A4ADBF" stroke-width="1.2" fill="none"/>`;
+}
+const STONE='fill="#C9CED8" stroke="#7E889E" stroke-width="2"';
+const FLAG=(x,y,c)=>`<path d="M${x} ${y}v-17" stroke="#5A3B22" stroke-width="2"/><path d="M${x} ${y-17}l15 4-15 5z" fill="${c}"/>`;
+const ARCH=(x,y,w,h,f)=>`<path d="M${x-w/2} ${y}v-${h-w/2}a${w/2} ${w/2} 0 0 1 ${w} 0v${h-w/2}z" fill="${f}"/>`;
 function myHouse(b,grow){
   const P=(i,s)=>b>i?`<g${grow===i?' class="grow"':''}>${s}</g>`:'';
-  let h='<ellipse cx="0" cy="2" rx="62" ry="11" fill="#C9A06A"/>';
-  if(b===0)h+='<g><ellipse cx="-34" cy="-2" rx="12" ry="6" fill="#B08654"/><rect x="24" y="-8" width="20" height="8" rx="2" fill="#C98A4B"/><rect x="-3" y="-40" width="6" height="42" fill="#8A5530"/><rect x="-36" y="-60" width="72" height="24" rx="5" fill="#F6E3B4" stroke="#8A5530" stroke-width="2"/><text x="0" y="-43" text-anchor="middle" font-family="Baloo 2,Trebuchet MS,sans-serif" font-weight="800" font-size="14" fill="#5A3B22">Bauplatz</text></g>';
-  h+=P(6,`<g>${[-80,-71,-62,62,71,80].map(x=>`<rect x="${x-3}" y="-22" width="6" height="22" rx="2" fill="#fff" stroke="#C9B48A" stroke-width="1.5"/>`).join('')}<path d="M-84-14h26M58-14h26" stroke="#C9B48A" stroke-width="3"/>
-    <path d="M-30 4v-6M-20 6v-6M28 5v-6M38 4v-6" stroke="#3E9B5B" stroke-width="2"/><circle cx="-30" cy="-3" r="4" fill="#F48FB1"/><circle cx="-20" cy="-1" r="4" fill="#FFB60F"/><circle cx="28" cy="-2" r="4" fill="#E0443A"/><circle cx="38" cy="-3" r="4" fill="#8E5CC9"/></g>`);
-  h+=P(5,`<rect x="22" y="-112" width="14" height="32" fill="#C0543A" stroke="#8A3B2E" stroke-width="2"/><circle class="smoke" cx="29" cy="-118" r="5" fill="#fff"/><circle class="smoke" cx="31" cy="-120" r="6" fill="#fff" style="animation-delay:1.2s"/>`);
-  h+=P(1,`<rect x="-44" y="-70" width="88" height="60" fill="#E9B97A" stroke="#9B6A3E" stroke-width="2"/><path d="M-44-58h88M-44-46h88M-44-34h88M-44-22h88" stroke="#C99558" stroke-width="1.5"/>`);
-  if(b>1&&b<=4)h+='<rect x="-36" y="-58" width="18" height="18" fill="#6B4A2E"/><rect x="18" y="-58" width="18" height="18" fill="#6B4A2E"/>';
-  h+=P(4,`<rect x="-36" y="-58" width="18" height="18" fill="#9FE3F5" stroke="#fff" stroke-width="2"/><rect x="18" y="-58" width="18" height="18" fill="#9FE3F5" stroke="#fff" stroke-width="2"/><path d="M-27-58v18M-36-49h18M27-58v18M18-49h18" stroke="#fff" stroke-width="2"/>`);
-  if(b>1&&b<=3)h+='<path d="M-11-10v-28q11-12 22 0v28z" fill="#6B4A2E"/>';
-  h+=P(3,`<path d="M-11-10v-28q11-12 22 0v28z" fill="#8A5530" stroke="#5A3B22" stroke-width="2"/><circle cx="6" cy="-24" r="2" fill="#FFD45C"/>`);
-  h+=P(0,`<rect x="-50" y="-11" width="100" height="12" rx="2" fill="#9AA3B2" stroke="#6E7890" stroke-width="2"/><path d="M-30-11v12M-6-11v12M18-11v12M40-11v12" stroke="#6E7890" stroke-width="1.5"/>`);
-  h+=P(2,`<path d="M-56-68L0-112l56 44z" fill="#D9573B" stroke="#A33A24" stroke-width="2" stroke-linejoin="round"/><path d="M-40-76h80M-25-88h50M-12-98h24" stroke="#A33A24" stroke-width="1.5"/>${b>4?'<circle cx="0" cy="-84" r="6" fill="#9FE3F5" stroke="#fff" stroke-width="2"/>':''}`);
-  h+=P(7,`<path d="M0-112v-24" stroke="#5A3B22" stroke-width="2.5"/><path d="M0-136l22 6-22 6z" fill="#FFB60F"/>
-    ${[.15,.32,.5,.68,.85].map((t,i)=>`<circle class="tw" cx="${(-56+56*t).toFixed(1)}" cy="${(-68-44*t).toFixed(1)}" r="3" fill="${['#FFE27A','#F48FB1','#7FD6F2'][i%3]}" style="animation-delay:${i*.3}s"/><circle class="tw" cx="${(56-56*t).toFixed(1)}" cy="${(-68-44*t).toFixed(1)}" r="3" fill="${['#7FD6F2','#FFE27A','#F48FB1'][i%3]}" style="animation-delay:${i*.3+.15}s"/>`).join('')}
-    <circle cx="-20" cy="-30" r="7" fill="#FFE27A" opacity=".45"/><circle cx="-20" cy="-30" r="3.5" fill="#FFE27A"/><circle cx="20" cy="-30" r="7" fill="#FFE27A" opacity=".45"/><circle cx="20" cy="-30" r="3.5" fill="#FFE27A"/>`);
+  const win=b>7?'#9FE3F5':'#4A3B2E';
+  let h='<ellipse cx="0" cy="2" rx="82" ry="12" fill="#C9A06A"/>';
+  if(b===0)h+='<g><ellipse cx="-40" cy="-2" rx="14" ry="7" fill="#A7B0BF"/><ellipse cx="-30" cy="-6" rx="9" ry="5" fill="#C9CED8"/><rect x="26" y="-8" width="22" height="8" rx="2" fill="#C98A4B"/><rect x="-3" y="-40" width="6" height="42" fill="#8A5530"/><rect x="-36" y="-60" width="72" height="24" rx="5" fill="#F6E3B4" stroke="#8A5530" stroke-width="2"/><text x="0" y="-43" text-anchor="middle" font-family="Baloo 2,Trebuchet MS,sans-serif" font-weight="800" font-size="14" fill="#5A3B22">Bauplatz</text></g>';
+  h+=P(9,'<ellipse cx="0" cy="7" rx="88" ry="12" fill="#5DB6E0"/><path d="M-70 9q7-4 14 0M-44 13q7-4 14 0M40 12q7-4 14 0M62 8q7-4 14 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".8"/>');
+  h+=P(8,`<rect x="-18" y="-104" width="36" height="50" ${STONE}/>${bricks(-18,18,-104,-54)}<path d="M-23-102L0-136l23 34z" fill="#7B5CD6" stroke="#5A3FAE" stroke-width="2" stroke-linejoin="round"/>${ARCH(0,-74,8,16,win)}`);
+  h+=P(3,`<rect x="-78" y="-96" width="28" height="86" ${STONE}/>${bricks(-78,-50,-96,-10)}${ARCH(-64,-62,8,15,win)}`);
+  h+=P(4,`<rect x="50" y="-96" width="28" height="86" ${STONE}/>${bricks(50,78,-96,-10)}${ARCH(64,-62,8,15,win)}`);
+  h+=P(1,`<rect x="-50" y="-62" width="100" height="52" ${STONE}/>${bricks(-50,50,-62,-10)}${ARCH(-32,-36,10,14,win)}${ARCH(32,-36,10,14,win)}`);
+  let m='';for(let x=-48;x<=40;x+=11)m+=`<rect x="${x}" y="-70" width="8" height="8" ${STONE}/>`;
+  if(b>3)for(const x of [-78,-68,-58])m+=`<rect x="${x}" y="-104" width="7" height="8" ${STONE}/>`;
+  if(b>4)for(const x of [51,61,71])m+=`<rect x="${x}" y="-104" width="7" height="8" ${STONE}/>`;
+  h+=P(5,m);
+  const roof=x=>`<path d="M${x-18}-98L${x}-132l18 34z" fill="#D9573B" stroke="#A33A24" stroke-width="2" stroke-linejoin="round"/><path d="M${x-11}-108h22M${x-6}-119h12" stroke="#A33A24" stroke-width="1.4"/>`;
+  h+=P(6,(b>3?roof(-64):'')+(b>4?roof(64):''));
+  if(b>1&&b<=2)h+=ARCH(0,-10,28,32,'#4A3B2E');
+  h+=P(2,`<g class="gate">${ARCH(0,-10,28,32,'#8A5530')}<path d="M-7-10v-28M0-10v-31M7-10v-28M-14-20h28M-14-30h28" stroke="#5A3B22" stroke-width="1.6"/></g>`);
+  h+=P(0,`<rect x="-82" y="-11" width="164" height="12" rx="2" fill="#9AA3B2" stroke="#6E7890" stroke-width="2"/><path d="M-60-11v12M-36-11v12M-12-11v12M12-11v12M36-11v12M60-11v12" stroke="#6E7890" stroke-width="1.5"/>`);
+  h+=P(9,'<path d="M-14-10h28l5 24h-38z" fill="#A0673A" stroke="#6B3E1F" stroke-width="2" stroke-linejoin="round"/><path d="M-15-4h30M-17 3h34M-18 9h36" stroke="#6B3E1F" stroke-width="1.4"/><path d="M-13-30l-6 42M13-30l6 42" stroke="#5A6A8A" stroke-width="1.4" stroke-dasharray="2 2"/>');
+  h+=P(10,FLAG(-64,-132,'#2D6CD8')+FLAG(64,-132,'#16935B')+FLAG(0,-136,'#FFB60F'));
+  h+=P(11,`${[-44,-33,-22,22,33,44].map((x,i)=>`<circle class="tw" cx="${x}" cy="-60" r="2.6" fill="${['#FFE27A','#F48FB1','#7FD6F2'][i%3]}" style="animation-delay:${i*.25}s"/>`).join('')}
+    <circle cx="-22" cy="-24" r="7" fill="#FFE27A" opacity=".45"/><circle cx="-22" cy="-24" r="3.5" fill="#FFE27A"/><circle cx="22" cy="-24" r="7" fill="#FFE27A" opacity=".45"/><circle cx="22" cy="-24" r="3.5" fill="#FFE27A"/>
+    ${[[-76,-4,'#F48FB1'],[-66,-2,'#FFB60F'],[-56,-4,'#E0443A'],[56,-4,'#8E5CC9'],[66,-2,'#F48FB1'],[76,-4,'#FFB60F']].map(([x,y,c])=>`<path d="M${x} ${y+4}v-6" stroke="#3E9B5B" stroke-width="2"/><circle cx="${x}" cy="${y-3}" r="3.5" fill="${c}"/>`).join('')}`);
   return h;
 }
 
@@ -1136,11 +1246,11 @@ function mapSVG(){
     </g>`;
   });
   const m=PLACES.mine;
-  s+=`<g class="hs" data-go="mine" role="button" tabindex="0" aria-label="${can?'Dein Bauplatz – du kannst weiterbauen':'Dein Bauplatz und dein Haus'}">
-    ${can?`<ellipse class="ring" cx="${m.x}" cy="${m.y+2}" rx="74" ry="16" fill="none" stroke="#FFB60F" stroke-width="4"/>`:''}
-    <g transform="translate(${m.x} ${m.y}) scale(.95)"><g class="hb">${myHouse(store.built)}</g></g>
+  s+=`<g class="hs" data-go="mine" role="button" tabindex="0" aria-label="${can?'Dein Bauplatz – du kannst weiterbauen':'Dein Bauplatz und dein Schloss'}">
+    ${can?`<ellipse class="ring" cx="${m.x}" cy="${m.y+3}" rx="72" ry="16" fill="none" stroke="#FFB60F" stroke-width="4"/>`:''}
+    <g transform="translate(${m.x} ${m.y}) scale(.78)"><g class="hb">${myHouse(store.built)}</g></g>
     ${can?`<g transform="translate(${m.x-82} ${m.y-70})"><g class="jump"><circle r="15" fill="#FFB60F" stroke="#fff" stroke-width="3"/><text y="7" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="800" font-size="20" fill="#fff">!</text></g></g>`:''}
-    ${LBL(m.x,m.y+6,store.name?`Haus von ${store.name}`:'Mein Haus')}
+    ${LBL(m.x,m.y+14,store.name?`Schloss von ${store.name}`:'Mein Schloss')}
   </g></svg>`;
   return s;
 }
@@ -1194,6 +1304,29 @@ function qVis(t){
   }
 }
 const modeOf=id=>MODES.find(m=>m.id===id);
+/* ---------- Stimmen: jedes Fabelwesen klingt anders ---------- */
+const VOICES={
+  erzaehler:{pitch:1.2,rate:.92},  /* freundlich und etwas heller */
+  troll:{pitch:.6,rate:.84},       /* tief und gemütlich */
+  fee:{pitch:1.65,rate:.95},       /* hoch und hell */
+  kobold:{pitch:1.4,rate:1.08},    /* quirlig und etwas schneller */
+  drache:{pitch:1.05,rate:.95}     /* mittelhoch */
+};
+let voiceAs=null;
+function voiceProfile(){
+  let id=voiceAs;
+  if(!id){
+    const v=VIEWS.find(x=>!$('#'+x).hidden);
+    if((v==='play'||v==='done')&&G&&G.house)id=G.house;
+    else if(v==='house')id=curHouse;
+  }
+  return VOICES[id]||VOICES.erzaehler;
+}
+function speakAs(id,text){voiceAs=id;try{speak(text,true);}finally{voiceAs=null;}}
+/* kleine Figur des Fabelwesens neben seinem Namen */
+const fig=h=>`<span class="wf" aria-hidden="true">${creature(h.id)}</span>`;
+const figName=h=>`<span class="wn">${fig(h)}${esc(h.who)}</span>`;
+const figRest=h=>esc(h.dat.slice(h.who.length));
 const isFav=t=>store.favs.some(f=>f.key===t.key);
 function toggleFav(t){
   if(isFav(t))store.favs=store.favs.filter(f=>f.key!==t.key);
@@ -1207,8 +1340,8 @@ function matbarHTML(){return MATKEYS.map(k=>`<div class="mat" data-m="${k}" aria
 /* ---------- Landkarte ---------- */
 function hintFor(){
   const st=nextStage(),total=MATKEYS.reduce((a,k)=>a+store.mat[k],0);
-  if(store.built===0&&total===0)return {who:'kobold',text:'Willkommen im Rechenland! Tippe auf ein Haus. Für jede richtige Aufgabe bekommst du ein Geschenk. Damit baust du dir dein eigenes Haus.'};
-  if(!st)return {who:'fee',text:`Dein Haus ist fertig${store.name?', '+store.name:''}! Darin kannst du deine Lieblingsaufgaben rechnen.`};
+  if(store.built===0&&total===0)return {who:'kobold',text:'Willkommen im Rechenland! Tippe auf ein Haus. Für jede richtige Aufgabe bekommst du ein Geschenk. Damit baust du dir dein eigenes Schloss.'};
+  if(!st)return {who:'fee',text:`Dein Schloss ist fertig${store.name?', '+store.name:''}! Darin kannst du deine Lieblingsaufgaben rechnen.`};
   if(canBuild())return {who:'troll',text:`Du kannst jetzt ${st.akk} bauen! Tippe auf deinen Bauplatz.`};
   const [k,n]=missing()[0],h=HOUSES.find(x=>x.mat===k);
   return {who:h.id,text:`Für ${st.akk} brauchst du noch ${matN(k,n)}. Die bekommst du bei ${h.dat}.`};
@@ -1219,7 +1352,7 @@ function renderMap(){
   const h=hintFor();
   $('#tip').innerHTML=`<div class="av">${creature(h.who)}</div><p>${esc(h.text)}</p><button class="say" id="tipSay" aria-label="Vorlesen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></button>`;
   $('#tipSay').hidden=!hasSpeech;
-  $('#tipSay').onclick=()=>speak(h.text,true);
+  $('#tipSay').onclick=()=>speakAs(h.who,h.text);
   $('#mapwrap').innerHTML=mapSVG();
 }
 function goMap(){if(G)clearTimeout(G.timer);G=null;try{speechSynthesis.cancel();}catch(e){}renderMap();show('map');}
@@ -1231,7 +1364,7 @@ $('#mapwrap').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')ret
 let curHouse='kobold';
 function openHouse(id){
   curHouse=id;const h=H(id);
-  $('#hTitle').textContent=`Bei ${h.dat}`;
+  $('#hTitle').innerHTML=`Bei ${figName(h)}${figRest(h)}`;
   const sc=$('#scene');
   sc.style.setProperty('--wall',h.wall);sc.style.setProperty('--floor',h.floor);sc.style.setProperty('--acc',h.acc);
   sc.innerHTML=`<svg class="win" viewBox="0 0 60 60" aria-hidden="true"><rect x="3" y="3" width="54" height="54" rx="10" fill="#BFE3F7" stroke="${h.acc}" stroke-width="5"/><circle cx="42" cy="18" r="7" fill="#FFD45C"/><path d="M8 48q12-14 22-4 10-12 24 2v9H8z" fill="#86C46A"/><path d="M30 3v54M3 30h54" stroke="${h.acc}" stroke-width="3"/></svg>
@@ -1249,12 +1382,34 @@ function renderTiles(){
   $('#tiles').innerHTML=h.ids.map(id=>{
     const m=modeOf(id),best=store.best[m.id+'_'+store.range]||0;
     const stars=[0,1,2].map(i=>i<best?STAR:STAR_OFF).join('');
-    return `<button class="tile" data-mode="${m.id}" style="--c:${m.c}"><span class="badge">${m.icon}</span><b>${m.name}</b><small>${m.desc}</small><span class="mini" aria-label="${best} von 3 Sternen">${stars}</span></button>`;
+    const n=m.id==='mix'?Object.keys(store.solved).length:(store.solvedN[m.id]||0);
+    return `<button class="tile" data-mode="${m.id}" style="--c:${m.c}" data-say="${esc(`${m.name}. ${m.desc}. ${best} von 3 Sternen. ${n} ${n===1?'Aufgabe':'Aufgaben'} gelöst.`)}"><span class="badge">${m.icon}</span><b>${m.name}</b><small>${m.desc}</small><span class="mini"><span aria-label="${best} von 3 Sternen">${stars}</span><span class="cnt">✓ ${n}</span></span></button>`;
   }).join('');
 }
 $('#tiles').addEventListener('click',e=>{const b=e.target.closest('.tile');if(b)start(b.dataset.mode,null,curHouse);});
 document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{store.range=+b.dataset.range;save();renderTiles();}));
 $('#hBack').addEventListener('click',goMap);
+
+/* ---------- Nur neue Aufgaben bringen Geschenke ---------- */
+/* Für das ganze Schloss braucht es 128 Geschenke (66 Steine, 28 Ziegel, 18 Holzbretter, 16 Kristalle).
+   Verschiedene Aufgaben allein im Zahlenraum bis 10: Troll 626, Kobold 398, Drache 154, Fee über 1500.
+   Jedes Material braucht damit weit weniger als 80 % der möglichen neuen Aufgaben. */
+const isSolved=k=>!!store.solved[k];
+function makeTasks2(mode,R,count){
+  const out=[],seen=new Set();let guard=0,old=0;
+  while(out.length<count&&guard++<900){
+    const t=gen(mode==='mix'?pick(MIXABLE):mode,R);
+    if(seen.has(t.key)&&guard<880)continue;
+    if(isSolved(t.key)&&guard<650)continue;
+    if(isSolved(t.key))old++;
+    seen.add(t.key);t.R=R;out.push(t);
+  }
+  out.old=old;return out;
+}
+function markSolved(t){
+  if(isSolved(t.key))return false;
+  store.solved[t.key]=1;store.solvedN[t.mode]=(store.solvedN[t.mode]||0)+1;return true;
+}
 
 /* ---------- Spiel ---------- */
 let G=null;
@@ -1262,11 +1417,12 @@ function start(mode,list,houseId){
   const R=store.range;
   if(G)clearTimeout(G.timer);
   const house=mode==='fav'?null:(houseId||houseOf(mode).id);
-  G={mode,R,house,tasks:list||makeTasks(mode,R,10),i:0,input:'',tries:0,locked:false,revealed:false,first:0,review:[],cells:null,timer:0,gifts:0};
+  const tasks=list||makeTasks2(mode,R,10);
+  G={mode,R,house,tasks,i:0,input:'',tries:0,locked:false,revealed:false,first:0,review:[],cells:null,timer:0,gifts:0,known:0,exhausted:!list&&tasks.old>0};
   if(mode==='fav'){$('#modeLabel').textContent='Meine Lieblingsaufgaben';}
   else{const m=modeOf(mode);$('#modeLabel').textContent=mode==='sudoku'?m.name:`${m.name} · bis ${R}`;}
-  $('#hostav').innerHTML=house?creature(house):`<svg class="crt" viewBox="-80 -150 160 165" aria-hidden="true">${myHouse(store.built)}</svg>`;
-  $('#quit').setAttribute('aria-label',house?`Zurück zu ${H(house).who}`:'Zurück zu meinem Haus');
+  $('#hostav').innerHTML=house?creature(house):`<svg class="crt" viewBox="-95 -160 190 182" aria-hidden="true">${myHouse(store.built)}</svg>`;
+  $('#quit').setAttribute('aria-label',house?`Zurück zu ${H(house).who}`:'Zurück in den Saal');
   renderGiftc();
   show('play');renderTask();
 }
@@ -1297,7 +1453,7 @@ function renderTask(){
   $('#task').innerHTML=taskHTML(t);
   if(t.mode==='immer'){G.cells=t.init.slice();renderTap();}
   $('#help').innerHTML=helpHTML(t);
-  $('#help').hidden=true;$('#helpBtn').hidden=false;$('#helpBtn').textContent='Hilfe zeigen';
+  $('#help').hidden=true;$('#helpBtn').hidden=!store.help;$('#helpBtn').textContent='Hilfe zeigen';
   $('#fb').textContent='';$('#fb').className='fb';
   const it=inputType(t);
   $('#pad').hidden=it!=='num';$('#cpad').hidden=it!=='cmp';$('#tapOk').hidden=it!=='tap';$('#next').hidden=true;
@@ -1353,17 +1509,24 @@ function submit(val){
     t.result=G.tries===0?'good':'help';
     if(G.tries===0)G.first++;else G.review.push(t);
     tone([[523,.14],[659,.14],[784,.22]]);speak(p);
-    if(G.house){const m=H(G.house).mat;store.mat[m]++;G.gifts++;save();setTimeout(()=>flyGift(m),250);}
+    const isNew=markSolved(t);
+    if(G.house&&isNew){const m=H(G.house).mat;store.mat[m]++;G.gifts++;setTimeout(()=>flyGift(m),250);}
+    else if(G.house){G.known++;fb.textContent+=' Die kanntest du schon.';}
+    save();
     renderDots();
     setTimeout(next,t.mode==='geschichte'?1900:1500);
     return;
   }
   G.tries++;
-  if(G.tries===1){
+  if(G.tries<=2){
+    /* 1. Fehler: nur noch einmal probieren. 2. Fehler: Hilfe einblenden. 3. Fehler: Lösung. */
+    const withHelp=G.tries===2;
     if(slot){slot.textContent=val;slot.className='slot shake';}
-    fb.textContent=t.mode==='immer'?`Du hast ${val} Plättchen. Es sollen genau ${t.T} sein.`:'Fast! Schau dir die Hilfe an und probier es noch einmal.';
+    const say=t.mode==='immer'?`Du hast ${val} Plättchen. Es sollen genau ${t.T} sein.`:withHelp?'Noch nicht. Schau dir die Hilfe an und probier es noch einmal.':'Fast! Probier es noch einmal.';
+    fb.textContent=say+(t.mode==='immer'&&withHelp?' Schau dir die Hilfe an.':'');
     fb.className='fb try';
-    showHelp(true);tone([[330,.2]]);speak(t.mode==='immer'?fb.textContent:'Fast! Probier es noch einmal.');
+    if(withHelp)showHelp(true);
+    tone([[330,.2]]);speak(fb.textContent);
     if(slot)setTimeout(()=>{if(G&&!G.locked&&!G.revealed){G.input='';slot.className='slot';updateSlot();}},700);
   }else{
     G.revealed=true;clearTimeout(G.timer);t.result='miss';G.review.push(t);
@@ -1401,8 +1564,14 @@ function finish(){
     save();
   }
   const h=G.house?H(G.house):null;
-  $('#doneAv').innerHTML=h?creature(h.id):`<svg class="crt" viewBox="-80 -150 160 165" aria-hidden="true">${myHouse(store.built)}</svg>`;
-  const say=h?(G.gifts?`Danke fürs Rechnen! Ich schenke dir ${matN(h.mat,G.gifts)}.`:'Danke fürs Rechnen! Beim nächsten Mal klappt es bestimmt.'):'Toll gerechnet in deinem Haus!';
+  $('#doneAv').innerHTML=h?creature(h.id):`<svg class="crt" viewBox="-95 -160 190 182" aria-hidden="true">${myHouse(store.built)}</svg>`;
+  let say='Toll gerechnet in deinem Schloss!';
+  if(h){
+    if(G.gifts)say=`Danke fürs Rechnen! Ich schenke dir ${matN(h.mat,G.gifts)}.`+(G.known?` ${G.known} ${G.known===1?'Aufgabe kanntest':'Aufgaben kanntest'} du schon, dafür gibt es kein Geschenk.`:'');
+    else if(G.known)say='Diese Aufgaben kanntest du schon. Für neue Aufgaben schenke ich dir wieder etwas!';
+    else say='Danke fürs Rechnen! Beim nächsten Mal klappt es bestimmt.';
+    if(G.exhausted)say+=` Hier gibt es kaum noch neue Aufgaben. Probier ein anderes Thema${G.R===10&&G.mode!=='sudoku'?' oder den Zahlenraum bis 20':''}.`;
+  }
   $('#doneSay').textContent=say;
   $('#gifts').innerHTML=h?fill(G.gifts,'').map((_,i)=>`<span style="animation-delay:${.25+i*.08}s">${MATSVG[h.mat]}</span>`).join(''):'';
   $('#gifts').hidden=!h||!G.gifts;
@@ -1416,7 +1585,7 @@ function finish(){
   $('#review').hidden=rv.length===0;$('#practice').hidden=rv.length===0;
   $('#reviewList').innerHTML=rv.map(t=>`<li>${solutionText(t)}</li>`).join('');
   $('#toBuild').hidden=!canBuild();
-  $('#toHouse').textContent=h?`Zurück zu ${h.who}`:'Zu meinem Haus';
+  $('#toHouse').innerHTML=h?`Zurück zu ${figName(h)}`:'Zurück in den Saal';
   $('#again').textContent=fav?'Nochmal rechnen':'Neue Runde';
   show('done');
   tone([[523,.15],[659,.15],[784,.15],[1047,.35]]);
@@ -1426,7 +1595,7 @@ function renderFavPick(){
   $('#favPick').innerHTML=G.tasks.map((t,i)=>`<li><button data-fi="${i}" aria-pressed="${isFav(t)}" aria-label="${esc((modeOf(t.mode)||{}).name+': '+qText(t))}"><span class="qv" aria-hidden="true">${qVis(t)}</span><span class="hrt">${HEART}</span></button></li>`).join('');
 }
 $('#favPick').addEventListener('click',e=>{const b=e.target.closest('[data-fi]');if(!b||!G)return;const on=toggleFav(G.tasks[+b.dataset.fi]);b.setAttribute('aria-pressed',on);if(on)tone([[784,.1],[1047,.14]]);});
-$('#favBtn').addEventListener('click',()=>{if(!G)return;const on=toggleFav(cur());renderFavBtn();const b=$('#favBtn');b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');if(on){tone([[784,.1],[1047,.14]]);speak('Gemerkt! Die Aufgabe kommt in dein Haus.',false);}});
+$('#favBtn').addEventListener('click',()=>{if(!G)return;const on=toggleFav(cur());renderFavBtn();const b=$('#favBtn');b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');if(on){tone([[784,.1],[1047,.14]]);speak('Gemerkt! Die Aufgabe kommt in dein Schloss.',false);}});
 
 $('#pad').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(b)press(b.dataset.k);});
 $('#cpad').addEventListener('click',e=>{const b=e.target.closest('[data-s]');if(b)submit(b.dataset.s);});
@@ -1446,7 +1615,7 @@ $('#next').addEventListener('click',next);
 function leave(){
   try{speechSynthesis.cancel();}catch(e){}
   const house=G&&G.house;if(G)clearTimeout(G.timer);G=null;
-  if(house)openHouse(house);else{renderMine();show('mine');}
+  if(house)openHouse(house);else openHall();
 }
 $('#quit').addEventListener('click',leave);
 $('#again').addEventListener('click',()=>{if(G.mode==='fav')start('fav',G.tasks.map(t=>Object.assign({},t,{result:null})));else start(G.mode,null,G.house);});
@@ -1464,32 +1633,32 @@ document.addEventListener('keydown',e=>{
   }else if(it==='cmp'&&['<','>','='].includes(e.key))submit(e.key);
 });
 
-/* ---------- Mein Haus ---------- */
+/* ---------- Mein Schloss ---------- */
 function renderMine(grow){
   const b=store.built,st=nextStage();
-  $('#mTitle').textContent=store.name?`Haus von ${store.name}`:'Mein Haus';
-  $('#myscene').innerHTML=`<svg viewBox="-110 -160 220 180" role="img" aria-label="Dein Haus: ${b} von ${STAGES.length} Bauschritten fertig">
+  $('#mTitle').textContent=store.name?`Schloss von ${store.name}`:'Mein Schloss';
+  $('#myscene').innerHTML=`<svg viewBox="-110 -160 220 180" role="img" aria-label="Dein Schloss: ${b} von ${STAGES.length} Bauschritten fertig">
     <rect x="-110" y="-160" width="220" height="180" fill="#BFE3F7"/><circle cx="-80" cy="-128" r="14" fill="#FFD45C"/>
     ${CLOUD(40,-128,.6,-20)}
     <path d="M-110-20q60-30 110-10t110-6V20h-220z" fill="#9BD47F"/><rect x="-110" y="0" width="220" height="20" fill="#86C46A"/>
-    ${TREE(-92,4,.7)}${FIR(96,6,.65)}
-    <g>${myHouse(b,grow)}</g></svg>`;
+    ${TREE(-102,-6,.5)}${FIR(104,-4,.5)}
+    <g>${myHouse(b,grow)}</g>${b>=DOOR?'<path class="ring gatehint" d="M-17-8v-18a17 17 0 0 1 34 0v18z" fill="none" stroke="#FFB60F" stroke-width="3"/><g class="gatehint"><g class="jump"><path d="M-8-60h16l-8 10z" fill="#FFB60F" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></g></g>':''}</svg>`;
   $('#steps').innerHTML=STAGES.map((s,i)=>`<i class="${i<b?'on':i===b?'next':''}"></i>`).join('');
   $('#matbar2').innerHTML=matbarHTML();
   const bd=$('#build');
   if(!st){
-    bd.innerHTML=`<h3>Dein Haus ist fertig!</h3><p class="sub">Alle ${STAGES.length} Bauschritte geschafft. Sammle weiter Geschenke und Sterne bei den Fabelwesen.</p>`;
+    bd.innerHTML=`<h3>Dein Schloss ist fertig!</h3><p class="sub">Alle ${STAGES.length} Bauschritte geschafft. Sammle weiter Geschenke und Sterne bei den Fabelwesen.</p>`;
   }else{
     const can=canBuild(),miss=missing();
     const needs=Object.entries(st.need).map(([k,n])=>`<span class="need ${store.mat[k]>=n?'ok':''}" aria-label="${matN(k,Math.min(store.mat[k],n))} von ${n}">${MATSVG[k]}${Math.min(store.mat[k],n)} / ${n}</span>`).join('');
     let more='';
-    if(!can){const [k,n]=miss[0],h=HOUSES.find(x=>x.mat===k);more=`<p class="sub">Dir fehlen noch ${matN(k,n)}. Die bekommst du bei ${h.dat}.</p><button class="big alt" id="goGet" data-h="${h.id}">Zu ${h.who} gehen</button>`;}
+    if(!can){const [k,n]=miss[0],h=HOUSES.find(x=>x.mat===k);more=`<p class="sub">Dir fehlen noch ${matN(k,n)}. Die bekommst du bei ${figName(h)}${figRest(h)}.</p><button class="big alt" id="goGet" data-h="${h.id}">Zu ${figName(h)} gehen</button>`;}
     bd.innerHTML=`<p class="sub">Bauschritt ${b+1} von ${STAGES.length}</p><h3>${st.name}</h3><div class="needs">${needs}</div>
       <button class="big go" id="buildBtn" ${can?'':'disabled'}>${can?st.akk.replace(/^\w/,c=>c.toUpperCase())+' bauen!':'Noch nicht genug'}</button>${more}`;
     $('#buildBtn').onclick=buildNext;
     const gg=$('#goGet');if(gg)gg.onclick=()=>openHouse(gg.dataset.h);
   }
-  renderFavs();
+  renderHallCard();
 }
 function buildNext(){
   if(!canBuild())return;
@@ -1501,26 +1670,42 @@ function buildNext(){
   tone([[523,.12],[659,.12],[784,.12],[1047,.18],[1319,.3]]);
   speak(`Hurra! Du hast ${st.akk} gebaut!`,false);
 }
-function renderFavs(){
+function renderHallCard(){
   const box=$('#favs'),n=store.favs.length;
   if(store.built<DOOR){
-    box.innerHTML=`<div class="locked"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="12" rx="3" fill="#FFB60F"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="#5A6A8A" stroke-width="2.4" fill="none"/></svg><p>Sobald dein Haus eine Tür hat, kannst du hinein. Dort rechnest du deine Lieblingsaufgaben. ${n?`Du hast schon ${n} gesammelt.`:'Tippe beim Rechnen auf das Herz, um eine Aufgabe zu sammeln.'}</p></div>`;
+    box.innerHTML=`<div class="locked"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="12" rx="3" fill="#FFB60F"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="#5A6A8A" stroke-width="2.4" fill="none"/></svg><p>Sobald dein Schloss ein Tor hat, kannst du hinein. Drinnen hängen deine Lieblingsaufgaben an der Wand. ${n?`Du hast schon ${n} gesammelt.`:'Tippe beim Rechnen auf das Herz, um eine Aufgabe zu sammeln.'}</p></div>`;
     return;
   }
-  if(!n){
-    box.innerHTML=`<h3>Meine Lieblingsaufgaben</h3><p class="sub">Noch leer. Tippe beim Rechnen auf das Herz, dann landet die Aufgabe hier.</p>`;
-    return;
-  }
-  box.innerHTML=`<h3>Meine Lieblingsaufgaben</h3><p class="sub">${n} gesammelt. Tippe auf eine Karte, um sie zu rechnen.</p>
-    <button class="big go" id="favAll">${n>10?'10 davon rechnen':'Alle rechnen'}</button>
-    <div class="favgrid">${store.favs.map((t,i)=>{const m=modeOf(t.mode);return `<div class="fwrap"><button class="fcard" data-play="${i}" aria-label="${esc((m?m.name+': ':'')+qText(t))}"><span class="qv" aria-hidden="true">${qVis(t)}</span><small>${m?m.name:''}</small></button><button class="fdel" data-del="${i}" aria-label="Aus Lieblingsaufgaben entfernen">✕</button></div>`;}).join('')}</div>`;
-  $('#favAll').onclick=()=>start('fav',shuffle(store.favs).slice(0,10).map(t=>Object.assign({},t)));
+  box.innerHTML=`<h3>Dein Saal</h3><p class="sub">Tippe auf das Tor, dann gehst du hinein. ${n?`An der Wand ${n===1?'hängt 1 Lieblingsaufgabe':`hängen ${n} Lieblingsaufgaben`}.`:'Noch hängen keine Lieblingsaufgaben an der Wand.'}</p><button class="big go" id="enterBtn">Ins Schloss gehen</button>`;
+  $('#enterBtn').onclick=openHall;
 }
-$('#favs').addEventListener('click',e=>{
+$('#myscene').addEventListener('click',e=>{if(store.built>=DOOR&&e.target.closest('.gate,.gatehint'))openHall();});
+
+/* ---------- Der Saal im Schloss ---------- */
+function openHall(){
+  if(store.built<DOOR){renderMine();show('mine');return;}
+  renderHall();show('hall');
+  const v=$('#hall');v.classList.remove('enter');void v.offsetWidth;v.classList.add('enter');
+  tone([[392,.12],[523,.12],[659,.2]]);
+  speak($('#hallSay').textContent);
+}
+function renderHall(){
+  const n=store.favs.length;
+  $('#hlTitle').textContent=store.name?`Im Schloss von ${store.name}`:'Im Schloss';
+  $('#hallSay').textContent=n?`Willkommen in deinem Saal${store.name?', '+store.name:''}! An der Wand hängen deine Lieblingsaufgaben. Tippe auf ein Bild, dann rechnest du die Aufgabe.`:`Willkommen in deinem Saal${store.name?', '+store.name:''}! Die Wand ist noch leer. Tippe beim Rechnen auf das Herz, dann hängt die Aufgabe hier.`;
+  const frames=store.favs.map((t,i)=>{const m=modeOf(t.mode);return `<div class="fr"><button class="frame" data-play="${i}" aria-label="${esc((m?m.name+': ':'')+qText(t))}"><span class="qv" aria-hidden="true">${qVis(t)}</span><small>${m?m.name:''}</small></button><button class="fdel" data-del="${i}" aria-label="Bild abhängen">✕</button></div>`;});
+  for(let k=n;k<Math.max(4,n%2?n+1:n);k++)frames.push('<div class="fr"><div class="frame empty">Platz für eine Lieblingsaufgabe</div></div>');
+  $('#wall').innerHTML=frames.join('');
+  $('#hallAll').hidden=!n;
+  $('#hallAll').textContent=n>10?'10 Bilder rechnen':n===1?'Das Bild rechnen':'Alle Bilder rechnen';
+}
+$('#wall').addEventListener('click',e=>{
   const p=e.target.closest('[data-play]'),d=e.target.closest('[data-del]');
-  if(d){store.favs.splice(+d.dataset.del,1);save();renderFavs();return;}
+  if(d){store.favs.splice(+d.dataset.del,1);save();renderHall();return;}
   if(p){const t=store.favs[+p.dataset.play];if(t)start('fav',[Object.assign({},t)]);}
 });
+$('#hallAll').addEventListener('click',()=>{if(store.favs.length)start('fav',shuffle(store.favs).slice(0,10).map(t=>Object.assign({},t)));});
+$('#hlBack').addEventListener('click',()=>{renderMine();show('mine');});
 $('#mBack').addEventListener('click',goMap);
 function confetti(){
   if(reduced()||!Element.prototype.animate)return;
@@ -1540,13 +1725,17 @@ function renderSettings(){
   $('#nameIn').value=store.name||'';
   $('#togSpeak').setAttribute('aria-pressed',!!store.speak);
   $('#togSound').setAttribute('aria-pressed',!!store.sound);
+  $('#togHelp').setAttribute('aria-pressed',!!store.help);
   $('#togSpeak').hidden=!hasSpeech;
   $('#reset').dataset.arm='';$('#reset').textContent='Alles zurücksetzen';
 }
 $('#openSet').addEventListener('click',()=>{renderSettings();show('settings');});
+$('#voiceTest').innerHTML=HOUSES.map(h=>`<button class="vt" data-v="${h.id}" data-say="${esc(h.who)}"><span class="wf" aria-hidden="true">${creature(h.id)}</span>${esc(h.who)}</button>`).join('');
+$('#voiceTest').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b||e.target.closest('.sp'))return;const h=H(b.dataset.v);speakAs(h.id,`Hallo${store.name?' '+store.name:''}! Ich bin ${h.who}, ${h.art}. Wollen wir zusammen rechnen?`);});
 $('#sBack').addEventListener('click',goMap);
 $('#nameIn').addEventListener('input',e=>{store.name=e.target.value.trim().slice(0,16);save();});
 $('#togSpeak').addEventListener('click',()=>{store.speak=!store.speak;save();renderSettings();if(store.speak)speak('Ich lese dir alles vor.');});
+$('#togHelp').addEventListener('click',()=>{store.help=!store.help;save();renderSettings();});
 $('#togSound').addEventListener('click',()=>{store.sound=!store.sound;save();renderSettings();tone([[660,.15]]);});
 $('#reset').addEventListener('click',e=>{
   const b=e.currentTarget;
@@ -1554,7 +1743,39 @@ $('#reset').addEventListener('click',e=>{
   store=DEF();save();goMap();
 });
 
+/* ---------- Vorlesen: hinter jedem Text und Knopf ---------- */
+const SPK='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>';
+const SAY_ABS='.tile,.big,.danger,.seg button,.cpad .key,.key.ok,.frame:not(.empty)';
+const SAY_INL='h1,h2,h3,.label,.helpbtn,.tog>span:first-child,.giftline>span,#doneTitle,#doneText,#doneSay,.favlist>b,.review>b,.note p,.build .sub,.locked p,.fb,.help p,.hint,#hallSay,.frame.empty,#modeLabel';
+function sayTextOf(el){
+  let t=el.dataset.say||el.getAttribute('aria-label')||el.innerText||'';
+  if(el.classList.contains('frame')||el.matches('.favlist li button'))t=el.getAttribute('aria-label')||t;
+  return t.replace(/\s*\n\s*/g,'. ').replace(/−/g,' minus ').replace(/·/g,', ').replace(/✓/g,'').replace(/✕/g,'').replace(/\s+/g,' ').replace(/([.!?:])\./g,'$1').trim();
+}
+function addSp(el,cls){
+  if(el.querySelector(':scope>.sp'))return;
+  if(!sayTextOf(el))return;
+  const s=document.createElement('span');s.className='sp '+cls;s.setAttribute('role','button');s.tabIndex=0;s.setAttribute('aria-label','Vorlesen');s.innerHTML=SPK;el.appendChild(s);
+}
+function decorate(){
+  if(!hasSpeech)return;
+  document.querySelectorAll(SAY_ABS).forEach(el=>addSp(el,'abs'));
+  document.querySelectorAll(SAY_INL).forEach(el=>addSp(el,'inl'));
+}
+let decoPending=false;
+try{new MutationObserver(()=>{if(decoPending)return;decoPending=true;requestAnimationFrame(()=>{decoPending=false;decorate();});}).observe($('.app'),{childList:true,subtree:true});}catch(e){}
+function readFrom(target){
+  const sp=target.closest('.sp');
+  if(sp){speak(sayTextOf(sp.parentElement),true);return true;}
+  const chip=target.closest('.mat,.need');
+  if(chip&&hasSpeech){speak(chip.getAttribute('aria-label'),true);return false;}
+  return false;
+}
+document.addEventListener('click',e=>{if(readFrom(e.target)){e.preventDefault();e.stopPropagation();}},true);
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('sp')){e.preventDefault();e.stopPropagation();readFrom(e.target);}},true);
+
 renderMap();
+decorate();
 
 })();
 </script>
